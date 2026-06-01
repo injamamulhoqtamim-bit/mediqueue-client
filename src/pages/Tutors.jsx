@@ -42,18 +42,39 @@ const Tutors = () => {
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                 />
-                <input 
-                    type="date" 
-                    className="input input-bordered"
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
-                />
-                <input 
-                    type="date" 
-                    className="input input-bordered"
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                />
+                <div>
+  <label className="label">
+    <span className="label-text">
+      From Date
+    </span>
+  </label>
+
+  <input
+    type="date"
+    className="input input-bordered"
+    value={startDate}
+    onChange={(e) =>
+      setStartDate(e.target.value)
+    }
+  />
+</div>
+
+<div>
+  <label className="label">
+    <span className="label-text">
+      To Date
+    </span>
+  </label>
+
+  <input
+    type="date"
+    className="input input-bordered"
+    value={endDate}
+    onChange={(e) =>
+      setEndDate(e.target.value)
+    }
+  />
+</div>
                 <button type="submit" className="btn btn-primary">Search & Filter</button>
             </form>
 

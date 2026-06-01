@@ -30,6 +30,31 @@ export const AuthProvider = ({ children }) => {
       setLoading(false);
     }
   };
+  const loginUser = async (email, password) => {
+  try {
+    setLoading(true);
+
+    const res = await axios.post(
+      "http://localhost:5000/login",
+      {
+        email,
+        password,
+      }
+    );
+
+    localStorage.setItem(
+      "access-token",
+      res.data.token
+    );
+
+    setUser(res.data.user);
+
+    return res.data;
+
+  } finally {
+    setLoading(false);
+  }
+};
 
   const logoutUser = () => {
     localStorage.removeItem("access-token");
@@ -63,11 +88,12 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const authInfo = {
-    user,
-    loading,
-    loginWithGoogle,
-    logoutUser,
-  };
+  user,
+  loading,
+  loginWithGoogle,
+  loginUser,
+  logoutUser,
+};
 
   return (
     <AuthContext.Provider value={authInfo}>

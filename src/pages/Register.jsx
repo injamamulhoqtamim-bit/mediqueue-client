@@ -4,12 +4,42 @@ import { AuthContext } from '../providers/AuthProvider';
 import { toast } from 'react-toastify';
 import { GoogleLogin } from '@react-oauth/google';
 import useDocumentTitle from '../hooks/useDocumentTitle';
+import axios from 'axios';
 
 const Register = () => {
   useDocumentTitle('Create Account');
 
   const { loginWithGoogle } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+
+    const form = e.target;
+
+    const userData = {
+      name: form.name.value,
+      email: form.email.value,
+      password: form.password.value,
+      photo: form.photo.value,
+    };
+
+    try {
+      const res = await axios.post(
+        'http://localhost:5000/register',
+        userData
+      );
+
+      toast.success(
+  'Registration Successful. Please Login.'
+);
+
+navigate('/login');
+    } catch (error) {
+      console.error(error);
+      toast.error('Registration Failed');
+    }
+  };
 
   return (
     <div className="flex justify-center items-center min-h-[80vh] px-4">
@@ -19,9 +49,51 @@ const Register = () => {
           Create Account
         </h2>
 
-        <p className="text-center text-gray-500 mb-6">
-          Continue with Google to create your account.
-        </p>
+        <form
+          onSubmit={handleRegister}
+          className="space-y-4 mb-6"
+        >
+          <input
+            type="text"
+            name="name"
+            placeholder="Full Name"
+            required
+            className="input input-bordered w-full"
+          />
+
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            required
+            className="input input-bordered w-full"
+          />
+
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            required
+            className="input input-bordered w-full"
+          />
+
+          <input
+            type="url"
+            name="photo"
+            placeholder="Photo URL"
+            required
+            className="input input-bordered w-full"
+          />
+
+          <button
+            type="submit"
+            className="btn btn-primary w-full"
+          >
+            Register
+          </button>
+        </form>
+
+        <div className="divider">OR</div>
 
         <div className="flex justify-center">
           <GoogleLogin

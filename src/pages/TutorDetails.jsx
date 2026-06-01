@@ -74,16 +74,18 @@ const TutorDetails = () => {
       </div>
     );
   }
+  console.log("Tutor Data:", tutor);
+console.log("User Data:", user);
 
   return (
     <div className="container mx-auto px-4 py-12 max-w-4xl">
       <div className="bg-base-100 shadow-xl rounded-2xl p-6 border">
 
         <img
-          src={tutor.photo}
-          alt={tutor.tutorName}
-          className="w-full h-72 object-cover rounded-xl mb-6"
-        />
+  src={tutor.photo}
+  alt={tutor.tutorName}
+  className="w-full h-[500px] object-cover object-top rounded-xl mb-6"
+/>
 
         <h2 className="text-3xl font-bold mb-3">
           {tutor.tutorName}

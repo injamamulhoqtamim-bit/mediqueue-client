@@ -7,14 +7,20 @@ import useDocumentTitle from '../hooks/useDocumentTitle';
 const MyTutors = () => {
     useDocumentTitle('My Tutor Submissions');
     const { user } = useContext(AuthContext);
+    console.log("Current User:", user);
+    console.log("User Email:", user?.email);
     const axiosSecure = useAxiosSecure();
     const [myTutors, setMyTutors] = useState([]);
     const [editingTutor, setEditingTutor] = useState(null);
 
     const loadData = () => {
+        console.log("Fetching Tutors For:", user?.email);
         axiosSecure.get(`/my-tutors?email=${user.email}`)
-            .then(res => setMyTutors(res.data));
-    };
+            .then(res => {
+
+            console.log("Tutor Data:", res.data); setMyTutors(res.data);
+        });
+};
 
     useEffect(() => {
         if(user?.email) loadData();
@@ -160,3 +166,5 @@ const MyTutors = () => {
 };
 
 export default MyTutors;
+
+

@@ -33,21 +33,20 @@ const Home = () => {
                 </div> 
                 <div id="slide2" className="carousel-item relative w-full h-full bg-gradient-to-r from-blue-900 to-indigo-950 flex flex-col justify-center items-center text-center p-6 text-white">
                     <h1 className="text-4xl md:text-6xl font-bold mb-4">Eliminate Manual Scheduling Blocks</h1>
-                    <p className="text-lg max-w-2xl mb-6">Real-time dynamic slot reservation metrics ensure zero operational overlaps or accidental multi-bookings across standard pipelines.</p>
-                    <Link to="/tutors" className="btn btn-primary px-8 font-bold">Reserve Now</Link>
+                    <p className="text-lg max-w-2xl mb-6"> Find available tutors and reserve your preferred learning slot in seconds. </p> <Link to="/tutors" className="btn btn-primary px-8 font-bold" > Reserve Now </Link> 
                     <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-                        <a href="#slide1" className="btn btn-circle opacity-50">❮</a> 
-                        <a href="#slide3" className="btn btn-circle opacity-50">❯</a>
-                    </div>
+                     <a href="#slide1" className="btn btn-circle opacity-50">❮</a> 
+                     <a href="#slide3" className="btn btn-circle opacity-50">❯</a> 
+                     </div>
                 </div> 
                 <div id="slide3" className="carousel-item relative w-full h-full bg-gradient-to-r from-violet-950 to-purple-900 flex flex-col justify-center items-center text-center p-6 text-white">
                     <h1 className="text-4xl md:text-6xl font-bold mb-4">Verified Credentials Architecture</h1>
-                    <p className="text-lg max-w-2xl mb-6">Every single expert onboarded goes through peer background routing check arrays to validate execution and history parameters.</p>
-                    <Link to="/tutors" className="btn btn-primary px-8 font-bold">Explore Categories</Link>
-                    <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-                        <a href="#slide2" className="btn btn-circle opacity-50">❮</a> 
-                        <a href="#slide1" className="btn btn-circle opacity-50">❯</a>
-                    </div>
+                   <p className="text-lg max-w-2xl mb-6"> Discover tutors from different subjects and choose the perfect mentor. </p> 
+                   <Link to="/tutors" className="btn btn-primary px-8 font-bold" > Explore Tutors </Link>
+                    <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2"> 
+                    <a href="#slide2" className="btn btn-circle opacity-50">❮</a>
+                     <a href="#slide1" className="btn btn-circle opacity-50">❯</a> 
+                     </div>
                 </div>
             </div>
 

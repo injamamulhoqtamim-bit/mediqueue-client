@@ -26,7 +26,7 @@ const Register = () => {
 
     try {
       const res = await axios.post(
-        'http://localhost:5000/register',
+        'https://mediqueue-server-zl2f.onrender.com/register',
         userData
       );
 

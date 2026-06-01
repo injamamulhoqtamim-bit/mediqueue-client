@@ -70,7 +70,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     axios
-      .get("http://localhost:5000/current-user", {
+      .get("https://mediqueue-server-zl2f.onrender.com/current-user", {
         headers: {
           authorization: `Bearer ${token}`,
         },

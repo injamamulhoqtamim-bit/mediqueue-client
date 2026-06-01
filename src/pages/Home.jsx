@@ -10,7 +10,7 @@ const Home = () => {
 
     useEffect(() => {
         // Query database fetching data passing structural parameter limit=6
-        axios.get('http://localhost:5000/tutors?limit=6')
+        axios.get('https://mediqueue-server-zl2f.onrender.com/tutors?limit=6') // Update with live server URL
             .then(res => {
                 setTopTutors(res.data);
                 setLoading(false);

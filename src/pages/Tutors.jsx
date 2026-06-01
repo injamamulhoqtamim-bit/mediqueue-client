@@ -13,7 +13,7 @@ const Tutors = () => {
 
     const fetchTutors = () => {
         setLoading(true);
-        axios.get(`http://localhost:5000/tutors?search=${search}&startDate=${startDate}&endDate=${endDate}`)
+        axios.get(`https://mediqueue-server-zl2f.onrender.com/tutors?search=${search}&startDate=${startDate}&endDate=${endDate}`)
             .then(res => {
                 setTutors(res.data);
                 setLoading(false);

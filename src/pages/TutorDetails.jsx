@@ -42,7 +42,7 @@ const TutorDetails = () => {
     };
 
     const res = await axios.post(
-      "http://localhost:5000/bookings",
+      "https://mediqueue-server-zl2f.onrender.com/bookings",
       bookingData
     );
 

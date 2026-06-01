@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosSecure = axios.create({
-    baseURL: 'http://localhost:5000' // Live server URL dynamic hobe deployment er por
+    baseURL: 'https://mediqueue-server-zl2f.onrender.com' // Live server URL dynamic hobe deployment er por
 });
 
 const useAxiosSecure = () => {

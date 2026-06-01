@@ -57,6 +57,7 @@ const AddTutor = () => {
                         <label className="label"><span className="label-text font-semibold">Subject Expertise Dropdown</span></label>
                         <select name="subject" className="select select-bordered w-full">
                             <option value="Mathematics">Mathematics</option>
+                            <option value="English">English</option>
                             <option value="Physics">Physics</option>
                             <option value="Chemistry">Chemistry</option>
                             <option value="Biology">Biology</option>

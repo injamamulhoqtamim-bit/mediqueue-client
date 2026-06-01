@@ -16,7 +16,7 @@ const TutorDetails = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/tutors/${id}`)
+      .get(`https://mediqueue-server-zl2f.onrender.com/tutors/${id}`)
       .then((res) => {
         setTutor(res.data);
       })

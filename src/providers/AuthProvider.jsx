@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
       setLoading(true);
 
       const res = await axios.post(
-        "http://localhost:5000/google-login",
+        "https://mediqueue-server-zl2f.onrender.com/google-login",
         {
           credential,
         }
@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
 
     const res = await axios.post(
-      "http://localhost:5000/login",
+      "https://mediqueue-server-zl2f.onrender.com/login",
       {
         email,
         password,

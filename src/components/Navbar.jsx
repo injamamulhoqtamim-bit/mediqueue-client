@@ -2,8 +2,10 @@ import { Link, useLocation } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../providers/AuthProvider";
 
+
 const Navbar = () => {
   const { user, logoutUser } = useContext(AuthContext);
+   console.log("Navbar User:", user);
   const location = useLocation();
 
   // root checking function to apply active styles to nav links

@@ -5,9 +5,9 @@ import Navbar from '../components/Navbar';
 const MainLayout = () => {
     // teacher student pictures for bacground
     const backgroundImages = [
-        "https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=1920&q=80", // শিক্ষিকা বোর্ডে শেখাচ্ছেন
-        "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1920&q=80", // শিক্ষক ও ছাত্র ল্যাপটপে একসাথে পড়ছেন
-        "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1920&q=80"  // টিউটর গাইড করছেন হোমওয়ার্কে
+        "https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=1920&q=80", 
+        "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1920&q=80",
+        "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1920&q=80"  
     ];
 
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -16,7 +16,7 @@ const MainLayout = () => {
     useEffect(() => {
         const interval = setInterval(() => {
             setCurrentImageIndex((prevIndex) => (prevIndex + 1) % backgroundImages.length);
-        }, 5000); // ৫০০০ মিলি-সেকেন্ড = ৫ সেকেন্ড
+        }, 5000); 
 
         return () => clearInterval(interval);
     }, [backgroundImages.length]);
@@ -54,15 +54,43 @@ const MainLayout = () => {
             <footer className="w-full bg-neutral text-neutral-content border-t border-neutral-focus shadow-2xl z-10">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
                     
-                    {/* Column 1: Services */}
+                    {/* Column 1: Services (Premium Educational Links Added) */}
                     <nav className="flex flex-col space-y-3">
                         <h6 className="footer-title text-primary uppercase font-bold tracking-wider opacity-100 mb-2 text-sm">
                             Learning Services
                         </h6> 
-                        <a className="link link-hover text-neutral-content/80 hover:text-primary transition-all duration-300 transform hover:translate-x-1">Mathematics Portal</a>
-                        <a className="link link-hover text-neutral-content/80 hover:text-primary transition-all duration-300 transform hover:translate-x-1">Quantum Physics Lab</a>
-                        <a className="link link-hover text-neutral-content/80 hover:text-primary transition-all duration-300 transform hover:translate-x-1">Advanced Biochemistry</a>
-                        <a className="link link-hover text-neutral-content/80 hover:text-primary transition-all duration-300 transform hover:translate-x-1">Computer Science Basic</a>
+                        <a 
+                            href="https://www.wolframalpha.com" 
+                            target="_blank" 
+                            rel="noreferrer" 
+                            className="link link-hover text-neutral-content/80 hover:text-primary transition-all duration-300 transform hover:translate-x-1"
+                        >
+                            Mathematics Portal
+                        </a>
+                        <a 
+                            href="https://www.khanacademy.org/science/physics" 
+                            target="_blank" 
+                            rel="noreferrer" 
+                            className="link link-hover text-neutral-content/80 hover:text-primary transition-all duration-300 transform hover:translate-x-1"
+                        >
+                            Quantum Physics Lab
+                        </a>
+                        <a 
+                            href="https://www.ncbi.nlm.nih.gov" 
+                            target="_blank" 
+                            rel="noreferrer" 
+                            className="link link-hover text-neutral-content/80 hover:text-primary transition-all duration-300 transform hover:translate-x-1"
+                        >
+                            Advanced Biochemistry
+                        </a>
+                        <a 
+                            href="https:// www.w3schools.com" 
+                            target="_blank" 
+                            rel="noreferrer" 
+                            className="link link-hover text-neutral-content/80 hover:text-primary transition-all duration-300 transform hover:translate-x-1"
+                        >
+                            Computer Science Basic
+                        </a>
                     </nav> 
 
                     {/* Column 2: Contact Info */}

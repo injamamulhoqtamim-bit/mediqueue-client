@@ -35,7 +35,7 @@ const Home = () => {
             .catch(() => setLoading(false));
     }, []);
 
-    // 🚀 স্ক্রল অ্যানিমেশন ডিটেক্টর (Intersection Observer)
+    //  (Intersection Observer)
     useEffect(() => {
         if (loading || topTutors.length === 0) return;
 
@@ -43,13 +43,13 @@ const Home = () => {
             (entries) => {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
-                        // কার্ড স্ক্রিনে আসলে এই ক্লাসগুলো যোগ হবে
+                        // 
                         entry.target.classList.remove('opacity-0', 'translate-y-16');
                         entry.target.classList.add('opacity-100', 'translate-y-0');
                     }
                 });
             },
-            { threshold: 0.05 } // ছোট স্ক্রিনে স্মুথ অভিজ্ঞতার জন্য থ্রেশহোল্ড সামান্য অপ্টিমাইজ করা হয়েছে
+            { threshold: 0.05 } // 
         );
 
         const cards = gridRef.current?.querySelectorAll('.scroll-animate-card');
@@ -116,9 +116,9 @@ const Home = () => {
                         {topTutors.map((tutor, index) => (
                             <div 
                                 key={tutor._id} 
-                                // 🌟 প্রাথমিক অবস্হায় opacity-0 এবং নিচ থেকে নামানোর জন্য translate-y-16 দেওয়া হয়েছে
+                                // scroll animation 
                                 className="scroll-animate-card opacity-0 translate-y-16 transform transition-all duration-700 ease-out card bg-base-200 shadow-xl border border-base-300 flex flex-col justify-between hover:scale-[1.02]"
-                                // ⏱️ একটি কার্ডের পর আরেকটি কার্ড আসার জন্য স্ট্যাগার্ড ডিলে (Staggered Delay)
+                                //  (Staggered Delay)
                                 style={{ transitionDelay: `${index * 80}ms` }}
                             >
                                 <figure className="px-3 pt-3 sm:px-4 sm:pt-4 md:px-6 md:pt-6">

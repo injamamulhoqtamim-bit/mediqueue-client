@@ -5,18 +5,19 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import useDocumentTitle from '../hooks/useDocumentTitle';
 
-// অরিজিনাল মডার্ন আইকন ইমপোর্ট করা হলো
+// Lucide Icons for form labels and cancel button
 import { 
     User, 
     Image, 
     BookOpen, 
     Calendar, 
-    DollarSign, 
+    CircleDollarSign, 
     Users, 
     CalendarDays, 
     GraduationCap, 
     MapPin, 
-    Video 
+    Video,
+    X // cancel icon for the top-right corner
 } from 'lucide-react';
 
 const AddTutor = () => {
@@ -58,11 +59,22 @@ const AddTutor = () => {
         <div className="container mx-auto px-4 py-8 md:py-16 max-w-5xl min-h-screen flex items-center justify-center">
             {/* Main Form Container */}
             <div className="rounded-2xl md:rounded-3xl shadow-2xl border border-transparent overflow-hidden w-full 
-                            animate-[fadeInUp_0.6s_ease-out] transition-all duration-300">
+                            animate-[fadeInUp_0.6s_ease-out] transition-all duration-300 relative">
                 
                 {/* Premium Gradient Header Banner */}
                 <div className="bg-gradient-to-r from-primary via-secondary to-accent p-6 md:p-10 text-center relative overflow-hidden">
                     <div className="absolute inset-0 bg-black/15 backdrop-blur-[2px]"></div>
+                    
+                    {/* Floating "X" Cancel Button */}
+                    <button
+                        type="button"
+                        onClick={() => navigate('/')}
+                        className="absolute top-4 right-4 z-20 p-2 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 rounded-full border border-white/10 transition-all duration-200 shadow-md backdrop-blur-sm group active:scale-95"
+                        title="Cancel and go Home"
+                    >
+                        <X size={20} className="transition-transform duration-200 group-hover:rotate-90" />
+                    </button>
+
                     <div className="relative z-10">
                         <h2 className="text-2xl sm:text-3xl md:text-5xl font-black text-white tracking-wide drop-shadow-md">
                             Launch Your Tutor Profile
@@ -143,18 +155,20 @@ const AddTutor = () => {
                         />
                     </div>
 
-                    {/* Hourly Fee */}
+                    {/* Monthly Fee  */}
                     <div className="form-control w-full">
                         <label className="label py-1.5 flex items-center gap-2">
-                            <DollarSign size={16} className="text-[#2d2a1e]" />
-                            <span className="label-text font-bold text-xs sm:text-sm md:text-base text-[#2d2a1e] tracking-wide">Hourly Fee (USD $)</span>
+                            <CircleDollarSign size={16} className="text-[#2d2a1e]" />
+                            <span className="label-text font-bold text-xs sm:text-sm md:text-base text-[#2d2a1e] tracking-wide">
+                                Monthly Fee (TK ৳)
+                            </span>
                         </label>
                         <input 
                             type="number" 
                             name="hourlyFee" 
                             required 
                             className="input w-full bg-[#fffcf5] border-none focus:outline-none focus:ring-2 focus:ring-black/30 rounded-xl md:rounded-2xl h-11 md:h-12 transition-all duration-200 text-xs sm:text-sm md:text-base font-medium text-gray-800 shadow-inner px-4" 
-                            placeholder="Ex: 25" 
+                            placeholder="Ex: 5000" 
                         />
                     </div>
 

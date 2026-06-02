@@ -7,6 +7,22 @@ const studentGroupImg = "https://images.unsplash.com/photo-1576091160550-2173dba
 const digitalCalendarImg = "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?q=80&w=1468&auto=format&fit=crop"; 
 const credentialsImg = "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=1470&auto=format&fit=crop"; 
 
+// 🎨 সাবজেক্ট অনুযায়ী ডাইনামিক কালার ম্যাপার (Tailwind Classes)
+const subjectStyles = {
+    "Mathematics": { bg: "bg-blue-100 text-blue-800 border-blue-200", cardBorder: "hover:border-blue-400" },
+    "English": { bg: "bg-purple-100 text-purple-800 border-purple-200", cardBorder: "hover:border-purple-400" },
+    "Physics": { bg: "bg-indigo-100 text-indigo-800 border-indigo-200", cardBorder: "hover:border-indigo-400" },
+    "Chemistry": { bg: "bg-teal-100 text-teal-800 border-teal-200", cardBorder: "hover:border-teal-400" },
+    "Biology": { bg: "bg-green-100 text-green-800 border-green-200", cardBorder: "hover:border-green-400" },
+    "Bangla": { bg: "bg-emerald-100 text-emerald-800 border-emerald-200", cardBorder: "hover:border-emerald-400" },
+    "History": { bg: "bg-amber-100 text-amber-800 border-amber-200", cardBorder: "hover:border-amber-400" },
+    "Geography": { bg: "bg-orange-100 text-orange-800 border-orange-200", cardBorder: "hover:border-orange-400" },
+    "Bio-Chemistry": { bg: "bg-pink-100 text-pink-800 border-pink-200", cardBorder: "hover:border-pink-400" },
+    "Computer Science": { bg: "bg-rose-100 text-rose-800 border-rose-200", cardBorder: "hover:border-rose-400" },
+    // ওপরে লিস্টেড না থাকা কোনো সাবজেক্ট আসলে নিচের ডিফল্ট কালারটি পাবে
+    "default": { bg: "bg-gray-100 text-gray-800 border-gray-200", cardBorder: "hover:border-primary" }
+};
+
 const Home = () => {
     useDocumentTitle('Home - Premium Learning Network');
     const [topTutors, setTopTutors] = useState([]);
@@ -20,7 +36,7 @@ const Home = () => {
         { id: 4, text: "Highly structured validation platform. I managed to book a bio-statistics crash course within 2 minutes. Peer-to-peer tutoring efficiency at its best.", author: "R. Hasan, Public Health Major", border: "border-info" },
         { id: 5, text: "As an engineering undergrad, timing conflict was my biggest nightmare. This platform completely bypasses double-booking system bugs.", author: "A. Rahman, BUET Student", border: "border-success" },
         { id: 6, text: "The response metric from domain mentors is lightning fast. No back-and-forth emails, just instant classroom link generations.", author: "F. Khan, Genetic Engineering Student", border: "border-warning" },
-        { id: 7, text: "Amazing deployment of filtering tools. Sorted by hourly rates and institutions to find my ideal anatomy coach instantly.", author: "M. Islam, First Year MBBS", border: "border-error" },
+        { id: 7, text: "Amazing deployment of filtering tools. Sorted by monthly fees and institutions to find my ideal anatomy coach instantly.", author: "M. Islam, First Year MBBS", border: "border-error" },
         { id: 8, text: "The customer service system and active validation parameters provide high trust layers. Highly secure login and instant session locks.", author: "Z. Akter, Computer Science Major", border: "border-primary" },
         { id: 9, text: "Incredible UX architecture. The cards show exact tutor availability data updates in real-time. Saved weeks of manual searching.", author: "K. Al-Hadi, Biochemistry Researcher", border: "border-secondary" },
         { id: 10, text: "Peer-to-peer knowledge mapping done perfectly. Learned complex quantum mechanics equations easily in a single custom scheduled session.", author: "S. Jaman, Physics Undergraduate", border: "border-accent" }
@@ -35,7 +51,6 @@ const Home = () => {
             .catch(() => setLoading(false));
     }, []);
 
-    //  (Intersection Observer)
     useEffect(() => {
         if (loading || topTutors.length === 0) return;
 
@@ -43,13 +58,12 @@ const Home = () => {
             (entries) => {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
-                        // 
                         entry.target.classList.remove('opacity-0', 'translate-y-16');
                         entry.target.classList.add('opacity-100', 'translate-y-0');
                     }
                 });
             },
-            { threshold: 0.05 } // 
+            { threshold: 0.05 }
         );
 
         const cards = gridRef.current?.querySelectorAll('.scroll-animate-card');
@@ -113,30 +127,38 @@ const Home = () => {
                     </div>
                 ) : (
                     <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                        {topTutors.map((tutor, index) => (
-                            <div 
-                                key={tutor._id} 
-                                // scroll animation 
-                                className="scroll-animate-card opacity-0 translate-y-16 transform transition-all duration-700 ease-out card bg-base-200 shadow-xl border border-base-300 flex flex-col justify-between hover:scale-[1.02]"
-                                //  (Staggered Delay)
-                                style={{ transitionDelay: `${index * 80}ms` }}
-                            >
-                                <figure className="px-3 pt-3 sm:px-4 sm:pt-4 md:px-6 md:pt-6">
-                                    <img src={tutor.photo} alt={tutor.tutorName} className="rounded-xl h-40 sm:h-44 md:h-48 w-full object-cover" />
-                                </figure>
-                                <div className="card-body p-4 sm:p-5 md:p-6">
-                                    <h3 className="card-title text-base sm:text-lg md:text-xl font-bold line-clamp-1">{tutor.tutorName}</h3>
-                                    <div className="flex justify-start my-1">
-                                        <span className="badge badge-primary badge-xs sm:badge-sm md:badge-md font-medium">{tutor.subject}</span>
-                                    </div>
-                                    <p className="text-xs md:text-sm text-gray-500 mt-1"><strong>Timing:</strong> {tutor.availableDays}</p>
-                                    <p className="text-sm md:text-base font-bold text-primary mt-1">${tutor.hourlyFee}/Hour</p>
-                                    <div className="card-actions mt-4">
-                                        <Link to={`/tutors/${tutor._id}`} className="btn btn-primary btn-block btn-sm md:btn-md font-semibold">Book Session</Link>
+                        {topTutors.map((tutor, index) => {
+                            // 🌟 বর্তমান টিউটরের সাবজেক্টের স্টাইল নির্ধারণ করা হচ্ছে
+                            const currentStyle = subjectStyles[tutor.subject] || subjectStyles["default"];
+
+                            return (
+                                <div 
+                                    key={tutor._id} 
+                                    className={`scroll-animate-card opacity-0 translate-y-16 transform transition-all duration-700 ease-out card bg-base-200 shadow-xl border border-transparent ${currentStyle.cardBorder} flex flex-col justify-between hover:scale-[1.02]`}
+                                    style={{ transitionDelay: `${index * 80}ms` }}
+                                >
+                                    <figure className="px-3 pt-3 sm:px-4 sm:pt-4 md:px-6 md:pt-6">
+                                        <img src={tutor.photo} alt={tutor.tutorName} className="rounded-xl h-40 sm:h-44 md:h-48 w-full object-cover" />
+                                    </figure>
+                                    <div className="card-body p-4 sm:p-5 md:p-6">
+                                        <h3 className="card-title text-base sm:text-lg md:text-xl font-bold line-clamp-1">{tutor.tutorName}</h3>
+                                        
+                                        {/* 🌈 ডাইনামিক সাবজেক্ট ব্যাজ কালার */}
+                                        <div className="flex justify-start my-1">
+                                            <span className={`badge border text-xs sm:text-sm font-semibold px-3 py-1 rounded-md ${currentStyle.bg}`}>
+                                                {tutor.subject}
+                                            </span>
+                                        </div>
+                                        
+                                        <p className="text-xs md:text-sm text-gray-500 mt-1"><strong>Timing:</strong> {tutor.availableDays}</p>
+                                        <p className="text-sm md:text-base font-bold text-primary mt-1">৳ {tutor.hourlyFee} BDT / Month</p>
+                                        <div className="card-actions mt-4">
+                                            <Link to={`/tutors/${tutor._id}`} className="btn btn-primary btn-block btn-sm md:btn-md font-semibold">Book Session</Link>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 )}
             </div>

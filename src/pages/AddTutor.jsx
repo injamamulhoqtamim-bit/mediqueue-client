@@ -168,6 +168,7 @@ const AddTutor = () => {
                             <option value="Bangla">Bangla</option>
                             <option value="History">History</option>
                             <option value="Geography">Geography</option>
+                            <option value="Bio-Chemistry">Bio-Chemistry</option>
                             <option value="Computer Science">Computer Science</option>
                         </select>
                     </div>

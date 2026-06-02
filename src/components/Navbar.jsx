@@ -6,7 +6,7 @@ const Navbar = () => {
   const { user, logoutUser } = useContext(AuthContext);
   const location = useLocation();
 
-  // কোন রুট একটিভ আছে তা চেক করার ফাংশন
+  // root checking function to apply active styles to nav links
   const isActive = (path) => location.pathname === path;
 
   // Nav items block with premium active/hover indicators
@@ -79,10 +79,7 @@ const Navbar = () => {
     </>
   );
 
-  // ১. ইউজারের ছবি কোন কোন ফিল্ডে থাকতে পারে তার নিরাপদ চেইনিং ব্যাকআপ
   const userPhoto = user?.photoURL || user?.photo || user?.image;
-  
-  // ২. ইউজারের নাম কোন কোন ফিল্ডে থাকতে পারে তার নিরাপদ চেইনিং ব্যাকআপ
   const userDisplayName = user?.displayName || user?.name || "Account";
 
   return (
@@ -90,23 +87,40 @@ const Navbar = () => {
       
       {/* Navbar Start: Mobile Hamburger & Brand logo */}
       <div className="navbar-start">
-        <div className="dropdown">
-          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden p-1 mr-2 hover:bg-base-200 rounded-xl">
+        <div className="dropdown group"> {/*  */}
+          
+          {/* Hamburger icon */}
+          <label 
+            tabIndex={0} 
+            role="button" 
+            className="btn btn-ghost lg:hidden p-1 mr-2 hover:bg-base-200 rounded-xl swap swap-rotate"
+          >
+            {/* Hamburger icon */}
+            <input type="checkbox" className="hidden" />
+            
+            {/* Hamburger icon */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 text-base-content"
+              className="h-6 w-6 text-base-content block group-focus-within:hidden"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h16M4 18h16"
-              />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
-          </div>
+
+            {/*  Cross button */}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6 text-base-content hidden group-focus-within:block"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </label>
+          
           <ul
             tabIndex={0}
             className="menu menu-sm dropdown-content mt-3 z-50 p-3 shadow-2xl bg-base-100 border border-base-200 rounded-2xl w-56 gap-2 font-sans"
@@ -115,7 +129,7 @@ const Navbar = () => {
           </ul>
         </div>
         
-        {/* Brand Logo with Premium Styling */}
+        {/* Brand Logo */}
         <Link to="/" className="flex items-center gap-1.5 group">
           <span className="text-xl sm:text-2xl font-black bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent tracking-tight group-hover:opacity-90 transition-opacity">
             Teachers Finding
@@ -151,7 +165,6 @@ const Navbar = () => {
                     alt={userDisplayName} 
                     referrerPolicy="no-referrer"
                     className="object-cover w-full h-full"
-                    // যদি নেটওয়ার্ক ইস্যু বা লিংকের কারণে ছবি লোড না হয়, তবে নামের প্রথম অক্ষর দিয়ে ইউআই অ্যাভাটার জেনারেট হবে
                     onError={(e) => {
                       e.target.onerror = null; 
                       e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(userDisplayName)}&background=random&color=fff`;
@@ -159,7 +172,6 @@ const Navbar = () => {
                   />
                 </div>
               ) : (
-                /* প্লেসহোল্ডার অ্যাভাটার (যদি ডেটাবেজে কোনো ছবিই না থাকে) */
                 <div className="avatar placeholder">
                   <div className="bg-neutral text-neutral-content rounded-full w-8 md:w-9 h-8 md:h-9 ring-2 ring-primary ring-offset-base-100 ring-offset-1 flex items-center justify-center">
                     <span className="text-xs font-bold uppercase">

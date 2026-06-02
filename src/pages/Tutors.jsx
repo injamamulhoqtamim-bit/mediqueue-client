@@ -126,10 +126,11 @@ const Tutors = () => {
                                 <div className="divider my-2 opacity-50"></div>
 
                                 <div className="flex justify-between items-center mt-2">
-                                    <div>
-                                        <p className="text-xs text-base-content/50 uppercase tracking-wider font-semibold">Hourly Rate</p>
-                                        <p className="text-xl font-extrabold text-primary">${tutor.hourlyFee}<span className="text-xs font-normal text-base-content/60">/hr</span></p>
-                                    </div>
+                                    {/* Monthly Fee */}
+<div>
+    <p className="text-xs text-base-content/50 uppercase tracking-wider font-semibold">Monthly Fee</p>
+    <p className="text-xl font-extrabold text-primary">৳ {tutor.hourlyFee} <span className="text-xs font-normal text-base-content/60">BDT</span></p>
+</div>
                                     <div className="text-right">
                                         <p className="text-xs text-base-content/50 uppercase tracking-wider font-semibold">Available Slots</p>
                                         <p className={`text-lg font-bold ${tutor.totalSlot > 0 ? 'text-success' : 'text-error'}`}>

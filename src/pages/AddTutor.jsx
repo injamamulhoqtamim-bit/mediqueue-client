@@ -22,7 +22,8 @@ import {
     Loader2
 } from 'lucide-react';
 
-const IMGBB_API_KEY = "YOUR_IMGBB_API_KEY_HERE"; 
+// ImgBB API Key from Environment Variables
+const IMGBB_API_KEY = import.meta.env.VITE_IMGBB_API_KEY;
 
 const AddTutor = () => {
     useDocumentTitle('Add Tutor Listing');

@@ -19,13 +19,13 @@ const subjectStyles = {
     "Geography": { bg: "bg-orange-100 text-orange-800 border-orange-200", cardBorder: "hover:border-orange-400" },
     "Bio-Chemistry": { bg: "bg-pink-100 text-pink-800 border-pink-200", cardBorder: "hover:border-pink-400" },
     "Computer Science": { bg: "bg-rose-100 text-rose-800 border-rose-200", cardBorder: "hover:border-rose-400" },
-    // default style for subjects not explicitly listed
     "default": { bg: "bg-gray-100 text-gray-800 border-gray-200", cardBorder: "hover:border-primary" }
 };
 
 const Home = () => {
     useDocumentTitle('Home - Premium Learning Network');
     const [topTutors, setTopTutors] = useState([]);
+    const [totalTutorsCount, setTotalTutorsCount] = useState(0); 
     const [loading, setLoading] = useState(true);
     const gridRef = useRef(null);
 
@@ -43,12 +43,20 @@ const Home = () => {
     ];
 
     useEffect(() => {
+        // ১. টপ ৬ জন টিউটর ফেচ করা
         axios.get('https://mediqueue-server-zl2f.onrender.com/tutors?limit=6') 
             .then(res => {
                 setTopTutors(res.data);
                 setLoading(false);
             })
             .catch(() => setLoading(false));
+
+        // ২. মোট কতজন টিউটর ডাটাবেজে আছে তা কাউন্ট করা
+        axios.get('https://mediqueue-server-zl2f.onrender.com/tutors')
+            .then(res => {
+                setTotalTutorsCount(res.data.length); 
+            })
+            .catch(err => console.log("Error counting tutors:", err));
     }, []);
 
     useEffect(() => {
@@ -73,7 +81,8 @@ const Home = () => {
     }, [loading, topTutors]);
 
     return (
-        <div className="space-y-12 md:space-y-20 pb-12 bg-base-100 text-base-content overflow-hidden">
+        <div className="space-y-12 md:space-y-20 pb-12 bg-base-100 text-base-content overflow-hidden relative">
+            
             {/* 1. Banner Section */}
             <div className="carousel w-full h-[55vh] md:h-[65vh] relative shadow-lg overflow-hidden">
                 <div id="slide1" className="carousel-item relative w-full h-full">
@@ -119,7 +128,19 @@ const Home = () => {
             {/* 2. Available Tutors Grid Area (With Scroll Animation) */}
             <div className="container mx-auto px-4 sm:px-6">
                 <h2 className="text-2xl md:text-3xl font-bold text-center mb-3">Featured Domain Experts</h2>
-                <p className="text-center text-gray-500 max-w-md mx-auto mb-8 text-xs sm:text-sm md:text-base px-2">Handpicked certified listings showing active time configurations and tracking capacity limits metrics.</p>
+                
+                {/* 🔢 সাবটাইটেল এবং অ্যাক্টিভ টিউটর কাউন্টার এখন ফ্লেক্স দিয়ে পাশাপাশি ও নিচে ডানপাশে সেট করা */}
+                <div className="flex flex-col md:flex-row md:justify-between items-center max-w-5xl mx-auto mb-8 gap-4 px-2">
+                    <p className="text-center md:text-left text-gray-500 max-w-md text-xs sm:text-sm md:text-base">
+                        Handpicked certified listings showing active time configurations and tracking capacity limits metrics.
+                    </p>
+                    <div className="flex-shrink-0">
+                        <div className="stats shadow-md bg-primary text-primary-content rounded-full px-5 py-1.5 flex items-center gap-2 border border-primary-focus animate-pulse">
+                            <span className="text-xs font-bold uppercase tracking-wider">Active Tutors:</span>
+                            <span className="text-lg font-extrabold">{totalTutorsCount}</span>
+                        </div>
+                    </div>
+                </div>
 
                 {loading ? (
                     <div className="flex justify-center py-12">
@@ -128,7 +149,6 @@ const Home = () => {
                 ) : (
                     <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                         {topTutors.map((tutor, index) => {
-                            // dignostic log for subject-based styling
                             const currentStyle = subjectStyles[tutor.subject] || subjectStyles["default"];
 
                             return (
@@ -143,7 +163,6 @@ const Home = () => {
                                     <div className="card-body p-4 sm:p-5 md:p-6">
                                         <h3 className="card-title text-base sm:text-lg md:text-xl font-bold line-clamp-1">{tutor.tutorName}</h3>
                                         
-                                        {/* Subject Badge */}
                                         <div className="flex justify-start my-1">
                                             <span className={`badge border text-xs sm:text-sm font-semibold px-3 py-1 rounded-md ${currentStyle.bg}`}>
                                                 {tutor.subject}
@@ -181,7 +200,7 @@ const Home = () => {
                         <div className="stat p-5 sm:p-6 md:p-8">
                             <div className="stat-title text-xs sm:text-sm font-medium text-gray-400">Active Learning Institutions</div>
                             <div className="stat-value text-accent text-2xl sm:text-3xl md:text-4xl mt-1">480+</div>
-                            <div className="stat-desc mt-1 text-xs">Global campus mapping access</div>
+                            <div className="stat-desc mt-1 text-xs">Global campus campus access</div>
                         </div>
                     </div>
                 </div>

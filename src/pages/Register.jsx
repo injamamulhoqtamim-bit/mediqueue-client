@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../providers/AuthProvider';
 import { toast } from 'react-toastify';
@@ -11,6 +11,14 @@ const Register = () => {
 
   const { loginWithGoogle } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  // 🎬 অ্যানিমেশন স্টেট: প্রথমে পেজ লোড হওয়ার সময় ফর্মটি নিচে থাকবে
+  const [animateIn, setAnimateIn] = useState(false);
+
+  // পেজ মাউন্ট হওয়ার সাথে সাথে স্টেট ট্রু হবে এবং অ্যানিমেশন শুরু হবে
+  useEffect(() => {
+    setAnimateIn(true);
+  }, []);
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -39,11 +47,13 @@ const Register = () => {
   };
 
   return (
-    // 🌌 py-6 থেকে md:py-14 ব্যবহার করে ছোট স্ক্রিনেও স্ক্রলিং ব্যালেন্স করা হয়েছে যেন কন্টেন্ট কেটে না যায়
+    // 🌌 py-6 থেকে md:py-14 ব্যবহার করে ছোট স্ক্রিনেও স্ক্রলিং ব্যালেন্স করা হয়েছে যেন কন্টেন্ট কেটে না যায়
     <div className="min-h-screen flex justify-center items-center px-4 py-6 sm:py-10 md:py-14 bg-gradient-to-b from-[#0A1828] to-[#172A45] relative overflow-hidden select-none">
       
-      {/* 💎 Premium Card Container - w-full max-w-md দিয়ে স্ক্রিন অনুযায়ী উইডথ অ্যাডজাস্ট হবে */}
-      <div className="w-full max-w-md bg-[#0D1F38]/40 border border-white/5 shadow-2xl p-5 xs:p-6 sm:p-10 rounded-2xl md:rounded-3xl z-10 backdrop-blur-md">
+      {/* 💎 Premium Card Container - এখানে নিচ থেকে উপরে আসার অ্যানিমেশন ক্লাস যুক্ত করা হয়েছে */}
+      <div className={`w-full max-w-md bg-[#0D1F38]/40 border border-white/5 shadow-2xl p-5 xs:p-6 sm:p-10 rounded-2xl md:rounded-3xl z-10 backdrop-blur-md transform transition-all duration-700 ease-out ${
+        animateIn ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'
+      }`}>
         
         {/* 📝 Header Title */}
         <div className="text-left mb-6 sm:mb-8">

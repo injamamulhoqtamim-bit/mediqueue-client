@@ -1,9 +1,45 @@
 import { Outlet } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 
 const MainLayout = () => {
+    // 📸 শিক্ষক-শিক্ষার্থীর পড়াশোনার ৩টি হাই-কোয়ালিটি ইমেজ লিঙ্ক (Unsplash CDN থেকে সরাসরি)
+    const backgroundImages = [
+        "https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=1920&q=80", // শিক্ষিকা বোর্ডে শেখাচ্ছেন
+        "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1920&q=80", // শিক্ষক ও ছাত্র ল্যাপটপে একসাথে পড়ছেন
+        "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1920&q=80"  // টিউটর গাইড করছেন হোমওয়ার্কে
+    ];
+
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+    // ⏱️ প্রতি ৫ সেকেন্ড পর পর ইমেজ অটো পরিবর্তন করার টাইমার
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentImageIndex((prevIndex) => (prevIndex + 1) % backgroundImages.length);
+        }, 5000); // ৫০০০ মিলি-সেকেন্ড = ৫ সেকেন্ড
+
+        return () => clearInterval(interval);
+    }, [backgroundImages.length]);
+
     return (
-        <div className="flex flex-col min-h-screen bg-base-100 text-base-content font-sans antialiased">
+        <div className="relative flex flex-col min-h-screen text-base-content font-sans antialiased bg-[#0A1828]">
+            
+            {/* 🖥️ ফুল-স্ক্রিন ইমেজ ব্যাকগ্রাউন্ড কন্টেইনার */}
+            <div className="fixed inset-0 w-full h-full -z-10 overflow-hidden pointer-events-none">
+                {backgroundImages.map((image, index) => (
+                    <div
+                        key={index}
+                        className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out ${
+                            index === currentImageIndex ? 'opacity-100' : 'opacity-0'
+                        }`}
+                        style={{ backgroundImage: `url('${image}')` }}
+                    />
+                ))}
+                
+                {/* 🌌 প্রিমিয়াম ডার্ক ওভারলে ও হালকা ব্লার (যাতে টেক্সট পরিষ্কার পড়া যায়) */}
+                <div className="absolute inset-0 bg-[#0A1828]/85 backdrop-blur-[2px]"></div>
+            </div>
+
             {/* Header / Navigation bar */}
             <header className="sticky top-0 z-50 backdrop-blur-md bg-base-100/90 shadow-sm border-b border-base-200">
                 <Navbar />
@@ -15,8 +51,7 @@ const MainLayout = () => {
             </main>
 
             {/* Premium Global Footer Structure */}
-            <footer className="w-full bg-neutral text-neutral-content border-t border-neutral-focus shadow-2xl">
-                {/* Upper Footer: Links and Info */}
+            <footer className="w-full bg-neutral text-neutral-content border-t border-neutral-focus shadow-2xl z-10">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
                     
                     {/* Column 1: Services */}
@@ -39,7 +74,7 @@ const MainLayout = () => {
                             <span>Dhaka Division, Bangladesh</span>
                         </p>
                         <p className="text-neutral-content/80 text-sm">
-                            <span className="font-medium text-white/90">Email:</span> support@mediqueue.com
+                            <span className="font-medium text-white/90">Email:</span> support@teachersfinding.com
                         </p>
                         <p className="text-neutral-content/80 text-sm">
                             <span className="font-medium text-white/90">Phone:</span> +880 1234 56789
@@ -52,7 +87,6 @@ const MainLayout = () => {
                             Social Connects
                         </h6> 
                         <div className="flex gap-3">
-                            {/* Rebranded X Logo Wrapper */}
                             <a 
                                 href="https://x.com" 
                                 target="_blank" 
@@ -65,7 +99,6 @@ const MainLayout = () => {
                                 </svg>
                             </a>
                             
-                            {/* LinkedIn Logo Wrapper */}
                             <a 
                                 href="https://linkedin.com" 
                                 target="_blank" 
@@ -86,7 +119,7 @@ const MainLayout = () => {
                             Legal Architecture
                         </h6>
                         <p className="text-sm text-neutral-content/70 leading-relaxed">
-                            Providing structured healthcare queues and advanced digital learning components seamlessly.
+                            Providing structured private tuition matching and advanced digital learning components seamlessly.
                         </p>
                     </div>
                 </div>
@@ -95,7 +128,7 @@ const MainLayout = () => {
                 <div className="border-t border-white/5 bg-black/20">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row justify-between items-center gap-4 text-center sm:text-left">
                         <p className="text-xs text-neutral-content/60 tracking-wide">
-                            &copy; 2026 MediQueue Systems Inc. All Rights Reserved.
+                            &copy; 2026 Teachers Finding Systems Inc. All Rights Reserved.
                         </p>
                         <div className="flex gap-4 text-xs text-neutral-content/40">
                             <a className="hover:text-primary transition-colors cursor-pointer">Privacy Policy</a>

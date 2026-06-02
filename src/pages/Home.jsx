@@ -7,7 +7,7 @@ const studentGroupImg = "https://images.unsplash.com/photo-1576091160550-2173dba
 const digitalCalendarImg = "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?q=80&w=1468&auto=format&fit=crop"; 
 const credentialsImg = "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=1470&auto=format&fit=crop"; 
 
-// 🎨 সাবজেক্ট অনুযায়ী ডাইনামিক কালার ম্যাপার (Tailwind Classes)
+// 🎨 Subject-based dynamic color mapper (Tailwind Classes)
 const subjectStyles = {
     "Mathematics": { bg: "bg-blue-100 text-blue-800 border-blue-200", cardBorder: "hover:border-blue-400" },
     "English": { bg: "bg-purple-100 text-purple-800 border-purple-200", cardBorder: "hover:border-purple-400" },
@@ -19,7 +19,7 @@ const subjectStyles = {
     "Geography": { bg: "bg-orange-100 text-orange-800 border-orange-200", cardBorder: "hover:border-orange-400" },
     "Bio-Chemistry": { bg: "bg-pink-100 text-pink-800 border-pink-200", cardBorder: "hover:border-pink-400" },
     "Computer Science": { bg: "bg-rose-100 text-rose-800 border-rose-200", cardBorder: "hover:border-rose-400" },
-    // ওপরে লিস্টেড না থাকা কোনো সাবজেক্ট আসলে নিচের ডিফল্ট কালারটি পাবে
+    // default style for subjects not explicitly listed
     "default": { bg: "bg-gray-100 text-gray-800 border-gray-200", cardBorder: "hover:border-primary" }
 };
 
@@ -128,7 +128,7 @@ const Home = () => {
                 ) : (
                     <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                         {topTutors.map((tutor, index) => {
-                            // 🌟 বর্তমান টিউটরের সাবজেক্টের স্টাইল নির্ধারণ করা হচ্ছে
+                            // dignostic log for subject-based styling
                             const currentStyle = subjectStyles[tutor.subject] || subjectStyles["default"];
 
                             return (
@@ -143,7 +143,7 @@ const Home = () => {
                                     <div className="card-body p-4 sm:p-5 md:p-6">
                                         <h3 className="card-title text-base sm:text-lg md:text-xl font-bold line-clamp-1">{tutor.tutorName}</h3>
                                         
-                                        {/* 🌈 ডাইনামিক সাবজেক্ট ব্যাজ কালার */}
+                                        {/* Subject Badge */}
                                         <div className="flex justify-start my-1">
                                             <span className={`badge border text-xs sm:text-sm font-semibold px-3 py-1 rounded-md ${currentStyle.bg}`}>
                                                 {tutor.subject}

@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 
 const MainLayout = () => {
-    // 📸 শিক্ষক-শিক্ষার্থীর পড়াশোনার ৩টি হাই-কোয়ালিটি ইমেজ লিঙ্ক (Unsplash CDN থেকে সরাসরি)
+    // teacher student pictures for bacground
     const backgroundImages = [
         "https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=1920&q=80", // শিক্ষিকা বোর্ডে শেখাচ্ছেন
         "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1920&q=80", // শিক্ষক ও ছাত্র ল্যাপটপে একসাথে পড়ছেন
@@ -12,7 +12,7 @@ const MainLayout = () => {
 
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-    // ⏱️ প্রতি ৫ সেকেন্ড পর পর ইমেজ অটো পরিবর্তন করার টাইমার
+    // Auto slide images
     useEffect(() => {
         const interval = setInterval(() => {
             setCurrentImageIndex((prevIndex) => (prevIndex + 1) % backgroundImages.length);
@@ -24,7 +24,7 @@ const MainLayout = () => {
     return (
         <div className="relative flex flex-col min-h-screen text-base-content font-sans antialiased bg-[#0A1828]">
             
-            {/* 🖥️ ফুল-স্ক্রিন ইমেজ ব্যাকগ্রাউন্ড কন্টেইনার */}
+            {/* image background*/}
             <div className="fixed inset-0 w-full h-full -z-10 overflow-hidden pointer-events-none">
                 {backgroundImages.map((image, index) => (
                     <div
@@ -36,7 +36,7 @@ const MainLayout = () => {
                     />
                 ))}
                 
-                {/* 🌌 প্রিমিয়াম ডার্ক ওভারলে ও হালকা ব্লার (যাতে টেক্সট পরিষ্কার পড়া যায়) */}
+                {/* Dark overlay with blur effect */}
                 <div className="absolute inset-0 bg-[#0A1828]/85 backdrop-blur-[2px]"></div>
             </div>
 

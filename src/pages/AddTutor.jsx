@@ -59,7 +59,7 @@ const AddTutor = () => {
                     </div>
                 </div>
 
-                {/* 🎨 Responsive Yellow Background Form Wrapper */}
+                {/*  Responsive Yellow Background Form Wrapper */}
                 <form onSubmit={handleAddTutor} className="p-4 sm:p-6 md:p-10 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 bg-[#f0d64d]">
                     
                     {/* Tutor Name */}

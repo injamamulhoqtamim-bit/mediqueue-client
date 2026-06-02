@@ -80,8 +80,8 @@ const Navbar = () => {
   );
 
   return (
-    /* sticky top-0 z-50: স্ক্রোল করার সময় ন্যাভবারটি উপরে ফিক্সড রাখবে।
-      backdrop-blur-md bg-base-100/80: স্ক্রোল করার সময় পেছনের কন্টেন্ট হালকা ব্লার দেখাবে।
+    /* sticky top-0 z-50: স্ক্রোল করার সময় ন্যাভবারটি উপরে ফিক্সড রাখবে।
+       backdrop-blur-md bg-base-100/80: স্ক্রোল করার সময় পেছনের কন্টেন্ট হালকা ব্লার দেখাবে।
     */
     <div className="navbar sticky top-0 z-50 bg-base-100/80 backdrop-blur-md border-b border-base-200/60 shadow-sm px-4 md:px-8 transition-all duration-300">
       
@@ -115,7 +115,7 @@ const Navbar = () => {
         {/* Brand Logo with Premium Styling */}
         <Link to="/" className="flex items-center gap-1.5 group">
           <span className="text-2xl font-black bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent tracking-tight group-hover:opacity-90 transition-opacity">
-            MediQueue
+            Teachers Finding
           </span>
         </Link>
       </div>

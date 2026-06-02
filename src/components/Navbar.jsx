@@ -6,7 +6,7 @@ const Navbar = () => {
   const { user, logoutUser } = useContext(AuthContext);
   const location = useLocation();
 
-  // কোন রুট একটিভ আছে তা চেক করার ফাংশন (ডিজাইন সুন্দর করার জন্য)
+  // কোন রুট একটিভ আছে তা চেক করার ফাংশন
   const isActive = (path) => location.pathname === path;
 
   // Nav items block with premium active/hover indicators
@@ -79,10 +79,13 @@ const Navbar = () => {
     </>
   );
 
+  // ১. ইউজারের ছবি কোন কোন ফিল্ডে থাকতে পারে তার নিরাপদ চেইনিং ব্যাকআপ
+  const userPhoto = user?.photoURL || user?.photo || user?.image;
+  
+  // ২. ইউজারের নাম কোন কোন ফিল্ডে থাকতে পারে তার নিরাপদ চেইনিং ব্যাকআপ
+  const userDisplayName = user?.displayName || user?.name || "Account";
+
   return (
-    /* sticky top-0 z-50: স্ক্রোল করার সময় ন্যাভবারটি উপরে ফিক্সড রাখবে।
-       backdrop-blur-md bg-base-100/80: স্ক্রোল করার সময় পেছনের কন্টেন্ট হালকা ব্লার দেখাবে।
-    */
     <div className="navbar sticky top-0 z-50 bg-base-100/80 backdrop-blur-md border-b border-base-200/60 shadow-sm px-4 md:px-8 transition-all duration-300">
       
       {/* Navbar Start: Mobile Hamburger & Brand logo */}
@@ -100,7 +103,7 @@ const Navbar = () => {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth="2"
-                 d="M4 6h16M4 12h16M4 18h16"
+                d="M4 6h16M4 12h16M4 18h16"
               />
             </svg>
           </div>
@@ -114,7 +117,7 @@ const Navbar = () => {
         
         {/* Brand Logo with Premium Styling */}
         <Link to="/" className="flex items-center gap-1.5 group">
-          <span className="text-2xl font-black bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent tracking-tight group-hover:opacity-90 transition-opacity">
+          <span className="text-xl sm:text-2xl font-black bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent tracking-tight group-hover:opacity-90 transition-opacity">
             Teachers Finding
           </span>
         </Link>
@@ -132,36 +135,50 @@ const Navbar = () => {
         {!user ? (
           <Link 
             to="/login" 
-            className="btn btn-primary btn-sm md:btn-md px-6 rounded-xl font-bold shadow-md hover:shadow-primary/20 transition-all duration-300"
+            className="btn btn-primary btn-sm md:btn-md px-5 sm:px-6 rounded-xl font-bold shadow-md hover:shadow-primary/20 transition-all duration-300 normal-case"
           >
             Login
           </Link>
         ) : (
-          <div className="flex items-center gap-3 bg-base-200/50 p-1.5 pr-3 rounded-full border border-base-200/80 shadow-inner">
+          <div className="flex items-center gap-2 md:gap-3 bg-base-200/50 p-1 md:p-1.5 pr-2.5 md:pr-4 rounded-full border border-base-200/80 shadow-inner">
+            
             {/* Avatar Section */}
-            {user.photoURL ? (
-              <div className="avatar">
-                <div className="w-8 md:w-9 rounded-full ring-2 ring-primary ring-offset-base-100 ring-offset-1 shadow-sm">
-                  <img src={user.photoURL} alt={user.name || "User"} />
+            <div className="avatar tooltip tooltip-bottom" data-tip={userDisplayName}>
+              {userPhoto ? (
+                <div className="w-8 md:w-9 h-8 md:h-9 rounded-full ring-2 ring-primary ring-offset-base-100 ring-offset-1 shadow-sm overflow-hidden bg-base-300">
+                  <img 
+                    src={userPhoto} 
+                    alt={userDisplayName} 
+                    referrerPolicy="no-referrer"
+                    className="object-cover w-full h-full"
+                    // যদি নেটওয়ার্ক ইস্যু বা লিংকের কারণে ছবি লোড না হয়, তবে নামের প্রথম অক্ষর দিয়ে ইউআই অ্যাভাটার জেনারেট হবে
+                    onError={(e) => {
+                      e.target.onerror = null; 
+                      e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(userDisplayName)}&background=random&color=fff`;
+                    }}
+                  />
                 </div>
-              </div>
-            ) : (
-              <div className="avatar placeholder">
-                <div className="bg-neutral text-neutral-content rounded-full w-8 md:w-9">
-                  <span className="text-xs">{user.name?.charAt(0) || "U"}</span>
+              ) : (
+                /* প্লেসহোল্ডার অ্যাভাটার (যদি ডেটাবেজে কোনো ছবিই না থাকে) */
+                <div className="avatar placeholder">
+                  <div className="bg-neutral text-neutral-content rounded-full w-8 md:w-9 h-8 md:h-9 ring-2 ring-primary ring-offset-base-100 ring-offset-1 flex items-center justify-center">
+                    <span className="text-xs font-bold uppercase">
+                      {userDisplayName.charAt(0)}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
             
             {/* User Name */}
-            <span className="font-semibold text-xs md:text-sm text-base-content/90 hidden sm:inline max-w-[120px] truncate">
-              {user.name || "Account"}
+            <span className="font-bold text-[11px] md:text-sm text-base-content/90 hidden sm:inline-block max-w-[100px] md:max-w-[140px] truncate">
+              {userDisplayName}
             </span>
 
             {/* Premium Logout Button */}
             <button 
               onClick={logoutUser} 
-              className="btn btn-error btn-xs md:btn-sm text-white px-3 md:px-4 rounded-full font-bold shadow-sm hover:scale-105 active:scale-95 transition-all"
+              className="btn btn-error text-white btn-xs md:btn-sm px-2.5 md:px-4 rounded-full font-bold shadow-sm hover:scale-105 active:scale-95 transition-all normal-case"
             >
               Logout
             </button>

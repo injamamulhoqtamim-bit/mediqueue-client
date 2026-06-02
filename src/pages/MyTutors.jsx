@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useCallback } from 'react';
 import { AuthContext } from '../providers/AuthProvider';
 import useAxiosSecure from '../hooks/useAxiosSecure';
 import { toast } from 'react-toastify';
@@ -7,35 +7,49 @@ import useDocumentTitle from '../hooks/useDocumentTitle';
 const MyTutors = () => {
     useDocumentTitle('My Tutor Submissions');
     const { user } = useContext(AuthContext);
-    console.log("Current User:", user);
-    console.log("User Email:", user?.email);
     const axiosSecure = useAxiosSecure();
+    
     const [myTutors, setMyTutors] = useState([]);
     const [editingTutor, setEditingTutor] = useState(null);
+    const [deletingTutor, setDeletingTutor] = useState(null); 
+    const [loading, setLoading] = useState(true);
 
-    const loadData = () => {
-        console.log("Fetching Tutors For:", user?.email);
+    const loadData = useCallback(() => {
+        if (!user?.email) return;
+        
+        setLoading(true);
         axiosSecure.get(`/my-tutors?email=${user.email}`)
             .then(res => {
-                console.log("Tutor Data:", res.data); 
                 setMyTutors(res.data);
+                setLoading(false);
+            })
+            .catch(err => {
+                console.error("Error fetching tutors:", err);
+                toast.error("Failed to load your tutor roster.");
+                setLoading(false);
             });
-    };
+    }, [user?.email, axiosSecure]);
 
     useEffect(() => {
-        if(user?.email) loadData();
-    }, [user]);
+        loadData();
+    }, [loadData]);
 
-    const handleDelete = (id) => {
-        if(window.confirm("Are you absolutely sure you want to delete this resource entry?")) {
-            axiosSecure.delete(`/tutors/${id}`)
-                .then(res => {
-                    if(res.data.deletedCount > 0) {
-                        toast.success("Tutor record permanently dropped.");
-                        loadData();
-                    }
-                });
-        }
+    const confirmDelete = () => {
+        if (!deletingTutor) return;
+
+        axiosSecure.delete(`/tutors/${deletingTutor._id}`)
+            .then(res => {
+                if (res.data.deletedCount > 0) {
+                    toast.success(`${deletingTutor.tutorName}'s profile permanently dropped.`);
+                    setDeletingTutor(null);
+                    loadData();
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                toast.error(err.response?.data?.message || "Unauthorized or failed to delete.");
+                setDeletingTutor(null);
+            });
     };
 
     const handleUpdateSubmit = (e) => {
@@ -56,57 +70,67 @@ const MyTutors = () => {
 
         axiosSecure.put(`/tutors/${editingTutor._id}`, updatedDoc)
             .then(res => {
-                if(res.data.modifiedCount > 0) {
+                if (res.data.modifiedCount > 0) {
                     toast.success("Document tracking records updated seamlessly!");
                     setEditingTutor(null);
                     loadData();
+                } else {
+                    toast.info("No changes were made to the document.");
+                    setEditingTutor(null);
                 }
+            })
+            .catch(err => {
+                console.error(err);
+                toast.error("Failed to update tutor records.");
             });
     };
 
     return (
-        <div className="container mx-auto px-4 py-6 md:py-16 max-w-6xl min-h-screen">
-            {/* ✨ Premium Header Section - Responsive Typography */}
-            <div className="text-center mb-8 md:mb-14">
-                <h2 className="text-2xl sm:text-3xl md:text-5xl font-black tracking-tight text-base-content bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
+        <div className="container mx-auto px-3 sm:px-4 py-6 md:py-16 max-w-6xl min-h-screen">
+            {/* ✨ Premium Header Section */}
+            <div className="text-center mb-6 sm:mb-8 md:mb-14">
+                <h2 className="text-xl sm:text-3xl md:text-5xl font-black tracking-tight text-base-content bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
                     Managed Tutor Accounts
                 </h2>
-                <p className="text-xs sm:text-sm md:text-base text-gray-500 mt-2 md:mt-3 max-w-md mx-auto px-2">
+                <p className="text-[11px] sm:text-sm md:text-base text-gray-500 mt-1.5 md:mt-3 max-w-md mx-auto px-2">
                     Supercharge your teaching roster. Monitor rates, check available seats, and fine-tune your tutor database.
                 </p>
             </div>
             
-            {myTutors.length === 0 ? (
-                <div className="text-center py-12 md:py-16 bg-base-200/50 backdrop-blur-md rounded-2xl md:rounded-3xl max-w-2xl mx-auto border border-dashed border-base-300 shadow-inner px-4">
-                    <div className="text-4xl md:text-5xl mb-3 md:mb-4">👨‍🏫</div>
-                    <h3 className="text-lg md:text-xl font-extrabold mb-1.5 md:mb-2 text-base-content">No Active Tutor Profiles Located</h3>
-                    <p className="text-gray-400 text-xs md:text-sm max-w-sm mx-auto">No active tutor profiles are hosted by your profile session yet.</p>
+            {/* 🔄 Loading */}
+            {loading ? (
+                <div className="flex justify-center items-center py-20">
+                    <span className="loading loading-spinner loading-lg text-primary"></span>
+                </div>
+            ) : myTutors.length === 0 ? (
+                <div className="text-center py-10 md:py-16 bg-base-200/50 backdrop-blur-md rounded-xl md:rounded-3xl max-w-2xl mx-auto border border-dashed border-base-300 shadow-inner px-4">
+                    <div className="text-3xl md:text-5xl mb-2 md:mb-4">👨‍🏫</div>
+                    <h3 className="text-base md:text-xl font-extrabold mb-1 text-base-content">No Active Tutor Profiles Located</h3>
+                    <p className="text-gray-400 text-[11px] md:text-sm max-w-sm mx-auto">No active tutor profiles are hosted by your profile session yet.</p>
                 </div>
             ) : (
-                /* 💎 Premium Fully Responsive Card Grid Layout */
+                /* 💎 Premium Card Grid Layout */
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
                     {myTutors.map(t => (
                         <div 
                             key={t._id} 
                             className="bg-base-100 rounded-xl md:rounded-2xl border border-base-200 shadow-md hover:shadow-2xl transition-all duration-300 flex flex-col justify-between overflow-hidden relative group sm:hover:-translate-y-1.5"
                         >
-                            {/* Card Body with Fluid Padding */}
                             <div className="p-4 sm:p-5 md:p-6 flex-1 flex flex-col gap-3 md:gap-4">
-                                
-                                {/* Profile Header (Image + Name + Subject Matrix) */}
+                                {/* Profile Header */}
                                 <div className="flex items-center gap-3 md:gap-4 min-w-0">
                                     <div className="avatar shrink-0">
-                                        <div className="mask mask-squircle w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14 ring-2 ring-primary/20 group-hover:ring-primary transition-all duration-300">
-                                            <img src={t.photo || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde"} alt={t.tutorName} />
+                                        <div className="mask mask-squircle w-11 h-11 md:w-14 md:h-14 ring-2 ring-primary/20 group-hover:ring-primary transition-all duration-300">
+                                            <img src={t.photo || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde"} alt={t.tutorName} className="object-cover" />
                                         </div>
                                     </div>
                                     <div className="min-w-0 flex-1">
-                                        <p className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-gray-400">Name</p>
-                                        <h3 className="text-sm sm:text-base md:text-lg font-black text-base-content group-hover:text-primary transition-colors duration-200 truncate">
+                                        <p className="text-[9px] font-bold uppercase tracking-widest text-gray-400">Name</p>
+                                        <h3 className="text-sm md:text-lg font-black text-base-content group-hover:text-primary transition-colors duration-200 truncate">
                                             {t.tutorName}
                                         </h3>
-                                        <div className="mt-0.5 md:mt-1">
-                                            <span className="badge badge-neutral text-[9px] md:text-[10px] font-bold tracking-wider uppercase px-2 py-1.5 h-auto whitespace-nowrap">
+                                        <div className="mt-0.5">
+                                            <span className="badge badge-neutral text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 h-auto whitespace-nowrap truncate max-w-full">
                                                 {t.subject}
                                             </span>
                                         </div>
@@ -115,117 +139,147 @@ const MyTutors = () => {
 
                                 <div className="h-[1px] bg-base-200 w-full"></div>
 
-                                {/* Metrics Row (Hourly Rate & Available Seats) */}
+                                {/* Metrics Row */}
                                 <div className="grid grid-cols-2 gap-2 bg-base-200/40 p-2.5 md:p-3 rounded-xl border border-base-200/60">
                                     <div className="min-w-0">
-                                        <p className="text-[9px] md:text-[10px] font-bold uppercase tracking-wider text-gray-400 truncate">Hourly Rate</p>
+                                        <p className="text-[9px] font-bold uppercase tracking-wider text-gray-400 truncate">Hourly Rate</p>
                                         <p className="text-xs sm:text-sm md:text-base font-extrabold text-primary mt-0.5 truncate">
                                             ${t.hourlyFee}<span className="text-[10px] text-gray-400 font-normal">/hr</span>
                                         </p>
                                     </div>
                                     <div className="border-l border-base-200 pl-2.5 md:pl-3 min-w-0">
-                                        <p className="text-[9px] md:text-[10px] font-bold uppercase tracking-wider text-gray-400 truncate">Available Seats</p>
+                                        <p className="text-[9px] font-bold uppercase tracking-wider text-gray-400 truncate">Available Seats</p>
                                         <p className="text-xs sm:text-sm md:text-base font-extrabold text-secondary mt-0.5 truncate">
                                             {t.totalSlot} Slots
                                         </p>
                                     </div>
                                 </div>
 
-                                {/* Optional Metadata Traces (Institution & Location Base) */}
-                                <div className="text-[10px] md:text-xs text-base-content/70 space-y-1 flex-1">
-                                    <p className="truncate">🏫 <span className="font-medium text-base-content/90">{t.institution || 'N/A'}</span></p>
-                                    <p className="truncate">📍 <span className="font-medium text-base-content/90">{t.location || 'Remote'}</span></p>
+                                {/* Metadata Traces */}
+                                <div className="text-[11px] md:text-xs text-base-content/70 space-y-1 flex-1">
+                                    <p className="truncate" title={t.institution}>🏫 <span className="font-medium text-base-content/90">{t.institution || 'N/A'}</span></p>
+                                    <p className="truncate" title={t.location}>📍 <span className="font-medium text-base-content/90">{t.location || 'Remote'}</span></p>
+                                    <p className="truncate">📅 <span className="font-medium text-base-content/90">{t.availableDays || 'N/A'}</span></p>
                                 </div>
 
-                                {/* Operational Action Matrix Buttons */}
-                                <div className="grid grid-cols-2 gap-2 mt-1 md:mt-2">
+                                {/* 💎 Premium Action Buttons Layout */}
+                                <div className="grid grid-cols-2 gap-2 sm:gap-3 mt-2 md:mt-4">
+                                    {/* Update Button */}
                                     <button 
                                         onClick={() => setEditingTutor(t)} 
-                                        className="btn btn-sm md:btn-md btn-warning font-bold tracking-wide text-xs rounded-xl shadow-sm hover:shadow-md transition-all duration-200 flex items-center justify-center gap-1 active:scale-95 text-amber-950 py-2 h-auto"
+                                        className="group/btn btn btn-sm md:btn-md bg-amber-500/10 hover:bg-amber-500 border border-amber-500/30 hover:border-amber-500 font-bold tracking-wide text-[11px] sm:text-xs rounded-xl shadow-sm transition-all duration-300 flex items-center justify-center gap-1.5 active:scale-95 text-amber-500 hover:text-amber-950 py-2 h-auto"
                                     >
-                                        ✏️ Update
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5 transition-transform duration-300 group-hover/btn:rotate-12">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                        </svg>
+                                        <span>Update</span>
                                     </button>
+
+                                    {/* Delete Button */}
                                     <button 
-                                        onClick={() => handleDelete(t._id)} 
-                                        className="btn btn-sm md:btn-md btn-error text-white font-bold tracking-wide text-xs rounded-xl shadow-sm hover:shadow-md transition-all duration-200 flex items-center justify-center gap-1 active:scale-95 py-2 h-auto"
+                                        onClick={() => setDeletingTutor(t)} 
+                                        className="group/btn btn btn-sm md:btn-md bg-rose-500/10 hover:bg-rose-500 border border-rose-500/30 hover:border-rose-500 text-rose-500 hover:text-white font-bold tracking-wide text-[11px] sm:text-xs rounded-xl shadow-sm transition-all duration-300 flex items-center justify-center gap-1.5 active:scale-95 py-2 h-auto"
                                     >
-                                        🗑️ Delete
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5 transition-transform duration-300 group-hover/btn:scale-110">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                        </svg>
+                                        <span>Delete</span>
                                     </button>
                                 </div>
-
                             </div>
                         </div>
                     ))}
                 </div>
             )}
 
-            {/* 🔒 Premium Fluid Glassmorphism Editing Modal - Full Screen Mobile Layout */}
+            {/* 🔒 Editing Modal */}
             {editingTutor && (
-                <div className="modal modal-open backdrop-blur-md transition-all duration-300 p-2 sm:p-4">
-                    <div className="modal-box max-w-2xl bg-base-100 rounded-xl md:rounded-2xl border border-base-300/50 shadow-2xl p-4 sm:p-6 md:p-8 relative overflow-y-auto max-h-[95vh] sm:max-h-[90vh] w-full">
-                        <button 
-                            type="button"
-                            onClick={() => setEditingTutor(null)}
-                            className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 sm:right-4 sm:top-4 z-10"
-                        >
-                            ✕
-                        </button>
+                <div className="modal modal-open backdrop-blur-md transition-all duration-300 p-2 sm:p-4 z-50">
+                    <div className="modal-box max-w-2xl bg-base-100 rounded-xl md:rounded-2xl border border-base-300/50 shadow-2xl p-4 sm:p-6 md:p-8 relative max-h-[90vh] flex flex-col w-full overflow-hidden">
+                        <button type="button" onClick={() => setEditingTutor(null)} className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 sm:right-4 sm:top-4 z-10">✕</button>
                         
-                        <div className="text-center mb-4 md:mb-6 mt-2 sm:mt-0">
-                            <h3 className="font-black text-lg sm:text-xl md:text-2xl text-base-content">
-                                Modify Profile Node
-                            </h3>
+                        <div className="text-center mb-4 shrink-0">
+                            <h3 className="font-black text-lg sm:text-xl md:text-2xl text-base-content">Modify Profile Node</h3>
                             <p className="text-[11px] sm:text-xs text-primary font-mono mt-0.5 truncate px-4">{editingTutor.tutorName}</p>
                         </div>
 
-                        <form onSubmit={handleUpdateSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+                        {/* Form Body - Scrollable on Small Screens */}
+                        <form onSubmit={handleUpdateSubmit} className="flex-1 overflow-y-auto pr-1 grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 pb-2">
                             <div className="form-control w-full">
-                                <label className="label py-0.5 md:py-1"><span className="label-text text-[11px] md:text-xs font-bold text-gray-500">Tutor Name</span></label>
+                                <label className="label py-0.5"><span className="label-text text-[11px] md:text-xs font-bold text-gray-500">Tutor Name</span></label>
                                 <input type="text" name="tutorName" defaultValue={editingTutor.tutorName} className="input input-bordered input-sm md:input-md rounded-xl w-full" required />
                             </div>
                             <div className="form-control w-full">
-                                <label className="label py-0.5 md:py-1"><span className="label-text text-[11px] md:text-xs font-bold text-gray-500">Photo URL</span></label>
+                                <label className="label py-0.5"><span className="label-text text-[11px] md:text-xs font-bold text-gray-500">Photo URL</span></label>
                                 <input type="text" name="photo" defaultValue={editingTutor.photo} className="input input-bordered input-sm md:input-md rounded-xl w-full" required />
                             </div>
                             <div className="form-control w-full">
-                                <label className="label py-0.5 md:py-1"><span className="label-text text-[11px] md:text-xs font-bold text-gray-500">Subject Set</span></label>
+                                <label className="label py-0.5"><span className="label-text text-[11px] md:text-xs font-bold text-gray-500">Subject Set</span></label>
                                 <input type="text" name="subject" defaultValue={editingTutor.subject} className="input input-bordered input-sm md:input-md rounded-xl w-full" required />
                             </div>
                             <div className="form-control w-full">
-                                <label className="label py-0.5 md:py-1"><span className="label-text text-[11px] md:text-xs font-bold text-gray-500">Available Days Window</span></label>
+                                <label className="label py-0.5"><span className="label-text text-[11px] md:text-xs font-bold text-gray-500">Available Days Window</span></label>
                                 <input type="text" name="availableDays" defaultValue={editingTutor.availableDays} className="input input-bordered input-sm md:input-md rounded-xl w-full" required />
                             </div>
                             <div className="form-control w-full">
-                                <label className="label py-0.5 md:py-1"><span className="label-text text-[11px] md:text-xs font-bold text-gray-500">Hourly Pricing Matrix</span></label>
-                                <input type="number" name="hourlyFee" defaultValue={editingTutor.hourlyFee} className="input input-bordered input-sm md:input-md rounded-xl w-full" required />
+                                <label className="label py-0.5"><span className="label-text text-[11px] md:text-xs font-bold text-gray-500">Hourly Pricing Matrix</span></label>
+                                <input type="number" step="any" name="hourlyFee" defaultValue={editingTutor.hourlyFee} className="input input-bordered input-sm md:input-md rounded-xl w-full" required />
                             </div>
                             <div className="form-control w-full">
-                                <label className="label py-0.5 md:py-1"><span className="label-text text-[11px] md:text-xs font-bold text-gray-500">Total Live Slots</span></label>
+                                <label className="label py-0.5"><span className="label-text text-[11px] md:text-xs font-bold text-gray-500">Total Live Slots</span></label>
                                 <input type="number" name="totalSlot" defaultValue={editingTutor.totalSlot} className="input input-bordered input-sm md:input-md rounded-xl w-full" required />
                             </div>
                             <div className="form-control w-full">
-                                <label className="label py-0.5 md:py-1"><span className="label-text text-[11px] md:text-xs font-bold text-gray-500">Session Date Marker</span></label>
+                                <label className="label py-0.5"><span className="label-text text-[11px] md:text-xs font-bold text-gray-500">Session Date Marker</span></label>
                                 <input type="date" name="sessionStartDate" defaultValue={editingTutor.sessionStartDate} className="input input-bordered input-sm md:input-md rounded-xl w-full" required />
                             </div>
                             <div className="form-control w-full">
-                                <label className="label py-0.5 md:py-1"><span className="label-text text-[11px] md:text-xs font-bold text-gray-500">Institution Track</span></label>
+                                <label className="label py-0.5"><span className="label-text text-[11px] md:text-xs font-bold text-gray-500">Institution Track</span></label>
                                 <input type="text" name="institution" defaultValue={editingTutor.institution} className="input input-bordered input-sm md:input-md rounded-xl w-full" required />
                             </div>
                             <div className="form-control w-full">
-                                <label className="label py-0.5 md:py-1"><span className="label-text text-[11px] md:text-xs font-bold text-gray-500">Location Base</span></label>
+                                <label className="label py-0.5"><span className="label-text text-[11px] md:text-xs font-bold text-gray-500">Location Base</span></label>
                                 <input type="text" name="location" defaultValue={editingTutor.location} className="input input-bordered input-sm md:input-md rounded-xl w-full" required />
                             </div>
                             <div className="form-control w-full">
-                                <label className="label py-0.5 md:py-1"><span className="label-text text-[11px] md:text-xs font-bold text-gray-500">Teaching Mode Map</span></label>
+                                <label className="label py-0.5"><span className="label-text text-[11px] md:text-xs font-bold text-gray-500">Teaching Mode Map</span></label>
                                 <input type="text" name="teachingMode" defaultValue={editingTutor.teachingMode} className="input input-bordered input-sm md:input-md rounded-xl w-full" required />
                             </div>
                             
-                            {/* Actions Group - Grid Stacked on Extra Small Devices */}
-                            <div className="sm:col-span-2 modal-action grid grid-cols-2 gap-3 mt-4 w-full">
+                            {/* Sticky Modal Actions */}
+                            <div className="sm:col-span-2 modal-action grid grid-cols-2 gap-3 mt-4 w-full pt-2 border-t border-base-200 bg-base-100 shrink-0">
                                 <button type="submit" className="btn btn-sm sm:btn-md btn-success text-white font-bold rounded-xl shadow-md py-2 h-auto text-xs sm:text-sm">Save Changes</button>
                                 <button type="button" onClick={() => setEditingTutor(null)} className="btn btn-sm sm:btn-md btn-outline border-base-300 rounded-xl py-2 h-auto text-xs sm:text-sm">Cancel</button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            )}
+
+            {/* 🔴 Delete Confirmation Modal */}
+            {deletingTutor && (
+                <div className="modal modal-open backdrop-blur-md transition-all duration-300 p-4 z-50">
+                    <div className="modal-box max-w-md bg-base-100/80 backdrop-blur-xl rounded-2xl border border-error/30 shadow-[0_0_40px_rgba(239,68,68,0.15)] p-5 sm:p-6 text-center relative">
+                        <div className="mx-auto w-12 h-12 sm:w-16 sm:h-16 bg-error/10 text-error flex items-center justify-center rounded-2xl mb-3 border border-error/20 text-2xl sm:text-3xl shadow-inner">
+                            <span className="animate-pulse">⚠️</span>
+                        </div>
+                        
+                        <h3 className="font-black text-lg sm:text-xl md:text-2xl text-base-content mt-1">
+                            Are you sure you want to delete your profile?
+                        </h3>
+                        
+                        <p className="text-xs text-gray-400 mt-2 mb-5 font-medium tracking-wide px-2 break-words">
+                            This will permanently remove <span className="text-error font-bold font-mono">"{deletingTutor.tutorName}"</span> from the global tracking system.
+                        </p>
+
+                        <div className="grid grid-cols-2 gap-3 w-full">
+                            <button type="button" onClick={() => setDeletingTutor(null)} className="btn btn-sm sm:btn-md btn-outline border-base-300 rounded-xl transition-all duration-200 active:scale-95 py-2.5 h-auto font-bold text-xs sm:text-sm text-base-content">
+                                No
+                            </button>
+                            <button onClick={confirmDelete} className="btn btn-sm sm:btn-md btn-error text-white font-bold rounded-xl shadow-md transition-all duration-200 active:scale-95 py-2.5 h-auto text-xs sm:text-sm">
+                                Yes
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}

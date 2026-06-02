@@ -2,11 +2,14 @@ import { useContext } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from '../providers/AuthProvider';
 import { toast } from 'react-toastify';
-import { GoogleLogin } from '@react-oauth/google';
+// 🌟 GoogleLogin এর পরিবর্তে useGoogleLogin ইমপোর্ট করা হয়েছে
+import { useGoogleLogin } from '@react-oauth/google'; 
 import useDocumentTitle from '../hooks/useDocumentTitle';
 
-// আইকনের জন্য react-icons ব্যবহার করা হয়েছে। যদি ইনস্টল করা না থাকে তবে টার্মিনালে লিখুন: npm i react-icons
+// আইকনের জন্য react-icons ব্যবহার করা হয়েছে
 import { FaUser, FaLock } from 'react-icons/fa';
+// 🌟 গুগল লোগো আইকনটি ইমপোর্ট করা হয়েছে
+import { FcGoogle } from 'react-icons/fc'; 
 
 const Login = () => {
   useDocumentTitle('User Core Authentication');
@@ -31,16 +34,34 @@ const Login = () => {
     }
   };
 
+  // 🌟 গুগল লগইনের কাস্টম ট্রিগার (UX Mode সহ)
+  const handleGoogleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        // টোকেন রেসপন্স থেকে সরাসরি এক্সেস টোকেন পাঠানো হচ্ছে
+        await loginWithGoogle(tokenResponse.access_token);
+        toast.success('Google Login Successful');
+        navigate(executionRedirectTarget, { replace: true });
+      } catch (err) {
+        console.error(err);
+        toast.error('Google Login Failed');
+      }
+    },
+    onError: () => {
+      toast.error('Google Login Failed');
+    },
+    ux_mode: 'popup', // নিশ্চিত করে পপআপ উইন্ডো হ্যান্ডলার অন করা
+  });
+
   return (
-    // মেইন ব্যাকগ্রাউন্ড গ্রাডিয়েন্ট (image_d1fdc7.png এর মতো)
     <div className="flex flex-col justify-center items-center min-h-screen bg-gradient-to-tr from-[#13113c] via-[#2b0c54] to-[#1a3fa8] px-4 py-12">
       
-      {/* ওয়েলকাম টেক্সট */}
+      {/* ওয়েলকাম টেক্সট */}
       <h1 className="text-3xl md:text-5xl font-bold text-white text-center mb-8 tracking-wide">
         Welcome to the website
       </h1>
 
-      {/* গ্লাস-মরফিজম লগইন কার্ড */}
+      {/* গ্লাস-মরফিজম লগইনカード */}
       <div className="w-full max-w-2xl bg-white/10 backdrop-blur-md shadow-2xl border border-white/10 p-8 md:p-12 rounded-[2.5rem] text-white">
         
         <h2 className="text-xl md:text-2xl font-semibold text-center mb-10 tracking-wider">
@@ -61,7 +82,7 @@ const Login = () => {
             />
           </div>
 
-          {/* পাসওয়ার্ড ইনপুট ফিল্ড */}
+          {/* পাসওয়ার্ড ইনপুট ফিল্ড */}
           <div className="relative flex items-center">
             <FaLock className="absolute left-6 text-gray-500 text-lg" />
             <input
@@ -73,7 +94,7 @@ const Login = () => {
             />
           </div>
 
-          {/* রিমেম্বার মি এবং ফরগট পাসওয়ার্ড লিন্ক */}
+          {/* রিমেম্বার মি এবং ফরগট পাসওয়ার্ড লিন্ক */}
           <div className="flex flex-col sm:flex-row justify-between items-center gap-3 text-sm text-gray-200/90 px-2 font-medium">
             <label className="flex items-center gap-2 cursor-pointer select-none">
               <input 
@@ -101,22 +122,16 @@ const Login = () => {
         {/* সোশ্যাল লগইন অংশ */}
         <div className="divider before:bg-white/20 after:bg-white/20 my-8 text-sm text-gray-300">OR</div>
 
-        <div className="flex justify-center bg-white p-1.5 rounded-full max-w-[240px] mx-auto shadow-md hover:opacity-90 transition-all">
-          <GoogleLogin
-            onSuccess={async (credentialResponse) => {
-              try {
-                await loginWithGoogle(credentialResponse.credential);
-                toast.success('Google Login Successful');
-                navigate(executionRedirectTarget, { replace: true });
-              } catch (err) {
-                console.error(err);
-                toast.error('Google Login Failed');
-              }
-            }}
-            onError={() => {
-              toast.error('Google Login Failed');
-            }}
-          />
+        {/* 🎯 শুধুমাত্র বৃত্তাকার "G" বাটন */}
+        <div className="flex justify-center">
+          <button
+            onClick={() => handleGoogleLogin()}
+            type="button"
+            title="Sign in with Google"
+            className="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl active:scale-90 hover:scale-105 transition-all cursor-pointer"
+          >
+            <FcGoogle className="text-3xl" />
+          </button>
         </div>
 
         {/* রেজিস্টার লিন্ক */}

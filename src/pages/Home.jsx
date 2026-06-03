@@ -100,7 +100,7 @@ const Home = () => {
     return (
         <div className="space-y-10 md:space-y-16 pb-12 bg-base-100 text-base-content overflow-hidden relative w-full">
             
-            {/* 1. Fixed Banner Section with Hardware Accelerated Slide Effect */}
+            {/* 1. Banner Section - Auto Height Adjust on Mobile */}
             <div 
                 className="relative w-full h-[50vh] sm:h-[55vh] md:h-[65vh] shadow-md overflow-hidden"
                 onMouseEnter={() => setIsHovered(true)}
@@ -115,6 +115,10 @@ const Home = () => {
                     <div className="w-full h-full flex-shrink-0 relative">
                         <img src={studentGroupImg} alt="Bangladeshi Teacher Session" className="w-full h-full object-cover object-center" />
                         <div className="absolute inset-0 bg-black/65 flex flex-col justify-center items-center text-center p-4 sm:p-6 text-white">
+                            <div className="inline-flex items-center gap-2 px-3 py-1 mb-3 rounded-full border border-amber-500/30 bg-amber-500/10 text-xs text-amber-400 font-medium">
+                                <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                                🎯 Tutors Bookings Platform
+                            </div>
                             <h1 className="text-xl sm:text-3xl md:text-5xl lg:text-6xl font-bold mb-2 md:mb-4 px-2 max-w-4xl leading-tight">Empower Your Academic Journey</h1>
                             <p className="text-[11px] sm:text-sm md:text-lg max-w-2xl mb-4 md:mb-6 px-2 opacity-90 leading-relaxed max-sm:line-clamp-3">Connect instantly with validated medical and science instructors mapped to your specific time zones without manual conflict overheads.</p>
                             <Link to="/tutors" className="btn btn-primary btn-xs sm:btn-sm md:btn-md px-4 sm:px-6 font-bold h-auto py-2 sm:py-0">Browse Live Tutors</Link>
@@ -125,6 +129,10 @@ const Home = () => {
                     <div className="w-full h-full flex-shrink-0 relative">
                         <img src={digitalCalendarImg} alt="Online Mentorship Setup" className="w-full h-full object-cover object-center" />
                         <div className="absolute inset-0 bg-black/65 flex flex-col justify-center items-center text-center p-4 sm:p-6 text-white">
+                            <div className="inline-flex items-center gap-2 px-3 py-1 mb-3 rounded-full border border-amber-500/30 bg-amber-500/10 text-xs text-amber-400 font-medium">
+                                <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                                🎯 Tutors Bookings Platform
+                            </div>
                             <h1 className="text-xl sm:text-3xl md:text-5xl lg:text-6xl font-bold mb-2 md:mb-4 px-2 max-w-4xl leading-tight">Eliminate Manual Scheduling</h1>
                             <p className="text-[11px] sm:text-sm md:text-lg max-w-2xl mb-4 md:mb-6 px-2 opacity-90 leading-relaxed max-sm:line-clamp-3">Find available tutors and reserve your preferred learning slot in seconds.</p> 
                             <Link to="/tutors" className="btn btn-primary btn-xs sm:btn-sm md:btn-md px-4 sm:px-6 font-bold h-auto py-2 sm:py-0">Reserve Now</Link> 
@@ -135,6 +143,10 @@ const Home = () => {
                     <div className="w-full h-full flex-shrink-0 relative">
                         <img src={credentialsImg} alt="Classroom Teacher Guidance" className="w-full h-full object-cover object-center" />
                         <div className="absolute inset-0 bg-black/65 flex flex-col justify-center items-center text-center p-4 sm:p-6 text-white">
+                            <div className="inline-flex items-center gap-2 px-3 py-1 mb-3 rounded-full border border-amber-500/30 bg-amber-500/10 text-xs text-amber-400 font-medium">
+                                <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                                🎯 Tutors Bookings Platform
+                            </div>
                             <h1 className="text-xl sm:text-3xl md:text-5xl lg:text-6xl font-bold mb-2 md:mb-4 px-2 max-w-4xl leading-tight">Verified Credentials Architecture</h1>
                             <p className="text-[11px] sm:text-sm md:text-lg max-w-2xl mb-4 md:mb-6 px-2 opacity-90 leading-relaxed max-sm:line-clamp-3">Discover tutors from different subjects and choose the perfect mentor.</p> 
                             <Link to="/tutors" className="btn btn-primary btn-xs sm:btn-sm md:btn-md px-4 sm:px-6 font-bold h-auto py-2 sm:py-0">Explore Tutors</Link>
@@ -142,13 +154,13 @@ const Home = () => {
                     </div>
                 </div>
 
-                {/* Left/Right Navigation Arrows (Hidden on Extra Small Screens for better UX) */}
+                {/* Left/Right Navigation Arrows - Hidden on Mobile */}
                 <div className="absolute hidden sm:flex justify-between transform -translate-y-1/2 left-2 right-2 md:left-5 md:right-5 top-1/2 z-20">
                     <button onClick={prevSlide} className="btn btn-circle btn-xs md:btn-md btn-ghost bg-black/30 text-white hover:bg-opacity-60 transition-colors">❮</button> 
                     <button onClick={nextSlide} className="btn btn-circle btn-xs md:btn-md btn-ghost bg-black/30 text-white hover:bg-opacity-60 transition-colors">❯</button>
                 </div>
 
-                {/* Indicators dots */}
+                {/* Indicators dots - Scaled down for mobile */}
                 <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex gap-1.5 z-20">
                     {[...Array(totalSlides)].map((_, i) => (
                         <button 
@@ -160,11 +172,11 @@ const Home = () => {
                 </div>
             </div>
 
-            {/* 2. Available Tutors Grid Area */}
+            {/* 2. Available Tutors Grid Area - Fully Responsive */}
             <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
                 <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-center mb-3">Featured Domain Experts</h2>
                 
-                {/* 🔄 Centered Layout Container */}
+                {/* 🔄 Centered Responsive Layout Container */}
                 <div className="flex flex-col items-center text-center max-w-2xl mx-auto mb-8 gap-3 sm:gap-4 px-2">
                     <p className="text-gray-500 text-xs sm:text-sm md:text-base mx-auto leading-relaxed">
                         Handpicked certified listings showing active time configurations and tracking capacity limits metrics.
@@ -182,6 +194,7 @@ const Home = () => {
                         <span className="loading loading-spinner loading-lg text-primary"></span>
                     </div>
                 ) : (
+                    /* Grid Breakpoints Configured for 1 col on Mobile, 2 on Tablet, 3 on Large Screens */
                     <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-8">
                         {topTutors.map((tutor, index) => {
                             const currentStyle = subjectStyles[tutor.subject] || subjectStyles["default"];
@@ -217,7 +230,7 @@ const Home = () => {
                 )}
             </div>
 
-            {/* 3. Extra Meaningful Section A */}
+            {/* 3. Operational Scale - Responsive Stack Grid */}
             <div className="bg-base-200 py-8 md:py-14 border-y border-base-300 text-base-content w-full">
                 <div className="container mx-auto px-4 sm:px-6 text-center max-w-7xl">
                     <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-6 md:mb-10">Platform Operational Scale</h2>
@@ -241,7 +254,7 @@ const Home = () => {
                 </div>
             </div>
 
-            {/* 4. Extra Meaningful Section B */}
+            {/* 4. Marquee Feedback Section - Text wrap fixed for Mobile */}
             <div className="w-full overflow-hidden py-4 bg-base-100">
                 <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-center mb-6 md:mb-10">Student Performance Feedback</h2>
                 

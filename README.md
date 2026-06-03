@@ -1,6 +1,6 @@
 🏥 MediQueue Server (Backend API)
 
-A secure and scalable backend API for the MediQueue platform built with Node.js, Express, MongoDB, JWT authentication, and Google OAuth login.
+A secure and scalable backend API for the MediQueue platform built with React.js, Express, MongoDB, JWT authentication, and Google OAuth login.
 
 🚀 Live Features
 🔐 JWT Authentication (Login/Register)

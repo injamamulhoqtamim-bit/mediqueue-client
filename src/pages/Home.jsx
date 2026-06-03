@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import useDocumentTitle from '../hooks/useDocumentTitle';
 import axios from 'axios';
 
-// 🎨 Bangladeshi / South Asian Teachers & Studying Vibe Images
+//  Bangladeshi / South Asian Teachers & Studying Vibe Images
 const studentGroupImg = "https://www.dhakatutors.com/slider/ii2.jpg"; 
 const digitalCalendarImg = "https://youthtuitioncenter.com/wp-content/uploads/2025/12/home_tutor.jpg";  
 const credentialsImg = "https://content.jdmagicbox.com/v2/comp/chennai/c2/044pxx44.xx44.211130032512.t8c2/catalogue/home-shiksha-thoraipakkam-chennai-home-tutors-pmoz6uaj1l.jpg"; 
@@ -29,7 +29,7 @@ const Home = () => {
     const [loading, setLoading] = useState(true);
     const gridRef = useRef(null);
 
-    // 🔄 Slider State Control
+    //  Slider State Control
     const [currentSlide, setCurrentSlide] = useState(0);
     const totalSlides = 3;
     const [isHovered, setIsHovered] = useState(false);
@@ -117,7 +117,7 @@ const Home = () => {
                         <div className="absolute inset-0 bg-black/65 flex flex-col justify-center items-center text-center p-4 sm:p-6 text-white">
                             <div className="inline-flex items-center gap-2 px-3 py-1 mb-3 rounded-full border border-amber-500/30 bg-amber-500/10 text-xs text-amber-400 font-medium">
                                 <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
-                                🎯 Tutors Bookings Platform
+                                 Tutors Bookings Platform
                             </div>
                             <h1 className="text-xl sm:text-3xl md:text-5xl lg:text-6xl font-bold mb-2 md:mb-4 px-2 max-w-4xl leading-tight">Empower Your Academic Journey</h1>
                             <p className="text-[11px] sm:text-sm md:text-lg max-w-2xl mb-4 md:mb-6 px-2 opacity-90 leading-relaxed max-sm:line-clamp-3">Connect instantly with validated medical and science instructors mapped to your specific time zones without manual conflict overheads.</p>
@@ -131,7 +131,7 @@ const Home = () => {
                         <div className="absolute inset-0 bg-black/65 flex flex-col justify-center items-center text-center p-4 sm:p-6 text-white">
                             <div className="inline-flex items-center gap-2 px-3 py-1 mb-3 rounded-full border border-amber-500/30 bg-amber-500/10 text-xs text-amber-400 font-medium">
                                 <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
-                                🎯 Tutors Bookings Platform
+                                 Tutors Bookings Platform
                             </div>
                             <h1 className="text-xl sm:text-3xl md:text-5xl lg:text-6xl font-bold mb-2 md:mb-4 px-2 max-w-4xl leading-tight">Eliminate Manual Scheduling</h1>
                             <p className="text-[11px] sm:text-sm md:text-lg max-w-2xl mb-4 md:mb-6 px-2 opacity-90 leading-relaxed max-sm:line-clamp-3">Find available tutors and reserve your preferred learning slot in seconds.</p> 
@@ -145,7 +145,7 @@ const Home = () => {
                         <div className="absolute inset-0 bg-black/65 flex flex-col justify-center items-center text-center p-4 sm:p-6 text-white">
                             <div className="inline-flex items-center gap-2 px-3 py-1 mb-3 rounded-full border border-amber-500/30 bg-amber-500/10 text-xs text-amber-400 font-medium">
                                 <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
-                                🎯 Tutors Bookings Platform
+                                 Tutors Bookings Platform
                             </div>
                             <h1 className="text-xl sm:text-3xl md:text-5xl lg:text-6xl font-bold mb-2 md:mb-4 px-2 max-w-4xl leading-tight">Verified Credentials Architecture</h1>
                             <p className="text-[11px] sm:text-sm md:text-lg max-w-2xl mb-4 md:mb-6 px-2 opacity-90 leading-relaxed max-sm:line-clamp-3">Discover tutors from different subjects and choose the perfect mentor.</p> 
@@ -176,7 +176,7 @@ const Home = () => {
             <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
                 <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-center mb-3">Featured Domain Experts</h2>
                 
-                {/* 🔄 Centered Responsive Layout Container */}
+                {/*  Centered Responsive Layout Container */}
                 <div className="flex flex-col items-center text-center max-w-2xl mx-auto mb-8 gap-3 sm:gap-4 px-2">
                     <p className="text-gray-500 text-xs sm:text-sm md:text-base mx-auto leading-relaxed">
                         Handpicked certified listings showing active time configurations and tracking capacity limits metrics.

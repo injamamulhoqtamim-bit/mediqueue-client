@@ -1,6 +1,8 @@
 import { Link, useLocation } from "react-router-dom";
 import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../providers/AuthProvider";
+// 
+//  
 
 const Navbar = () => {
   const { user, logoutUser } = useContext(AuthContext);
@@ -27,7 +29,7 @@ const Navbar = () => {
 
   const isActive = (path) => location.pathname === path;
 
-  // Nav items block - ডার্ক মোডের জন্য টেক্সট ও একটিভ স্টেট ফিক্স করা হয়েছে
+  // Nav items block 
   const navLinks = (
     <>
       <li>
@@ -101,7 +103,7 @@ const Navbar = () => {
   const userDisplayName = user?.displayName || user?.name || "Account";
 
   return (
-    // Navbar background dark mode এর জন্য স্পেসিফিক করা হয়েছে
+    // Navbar background dark mode 
     <div className="navbar sticky top-0 z-50 bg-base-100/80 dark:bg-[#0f172a]/90 backdrop-blur-md border-b border-base-200/60 dark:border-gray-800 shadow-sm px-4 md:px-8 transition-all duration-300">
       
       {/* Navbar Start: Mobile Hamburger & Brand logo */}
@@ -141,8 +143,14 @@ const Navbar = () => {
           </ul>
         </div>
         
-        {/* Brand Logo */}
-        <Link to="/" className="flex items-center gap-1.5 group">
+        {/* Brand Logo & Name */}
+        <Link to="/" className="flex items-center gap-2 group">
+          {/* লোগো ইমেজ ট্যাগ */}
+          <img 
+            src="/logo.png" // 
+            alt="Teachers Finding Logo" 
+            className="w-8 h-8 md:w-9 md:h-9 object-contain group-hover:scale-105 transition-transform duration-300" 
+          />
           <span className="text-xl sm:text-2xl font-black bg-gradient-to-r from-primary to-secondary dark:from-indigo-400 dark:to-pink-500 bg-clip-text text-transparent tracking-tight group-hover:opacity-90 transition-opacity">
             Teachers Finding
           </span>

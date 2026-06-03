@@ -1,9 +1,11 @@
 import { Outlet } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
+// ১. আপনার লোগো ফাইলটি যদি src/assets ফোল্ডারে থাকে তবে এভাবে ইমপোর্ট করুন:
+// import logo from "../assets/logo.png";
 
 const MainLayout = () => {
-    // teacher student pictures for bacground
+    // teacher student pictures for background
     const backgroundImages = [
         "https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=1920&q=80", 
         "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1920&q=80",
@@ -24,7 +26,7 @@ const MainLayout = () => {
     return (
         <div className="relative flex flex-col min-h-screen text-base-content font-sans antialiased bg-[#0A1828]">
             
-            {/* image background*/}
+            {/* image background */}
             <div className="fixed inset-0 w-full h-full -z-10 overflow-hidden pointer-events-none">
                 {backgroundImages.map((image, index) => (
                     <div
@@ -52,10 +54,27 @@ const MainLayout = () => {
 
             {/* Premium Global Footer Structure */}
             <footer className="w-full bg-neutral text-neutral-content border-t border-neutral-focus shadow-2xl z-10">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
+                
+                {/* Brand Logo & Name Area for Footer (Fully Responsive Alignment) */}
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-4 border-b border-white/5">
+                    <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-2.5 group w-full sm:w-fit text-center sm:text-left">
+                        {/* লোগো ইমেজ ট্যাগ */}
+                        <img 
+                            src="/logo.png" // public ফোল্ডারে থাকলে এভাবে রাখুন, assets ফোল্ডারে থাকলে src={logo} দিন
+                            alt="Teachers Finding Logo" 
+                            className="w-9 h-9 md:w-10 md:h-10 object-contain transition-transform duration-300 group-hover:scale-105" 
+                        />
+                        <span className="text-2xl font-black bg-gradient-to-r from-primary to-secondary dark:from-indigo-400 dark:to-pink-500 bg-clip-text text-transparent tracking-tight">
+                            Teachers Finding
+                        </span>
+                    </div>
+                </div>
+
+                {/* Grid Adjustment: Mobile-এ ১ কলাম, Tablet-এ ২ কলাম এবং Desktop-এ ৪ কলাম হবে */}
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 text-center sm:text-left">
                     
-                    {/* Column 1: Services (Premium Educational Links Added) */}
-                    <nav className="flex flex-col space-y-3">
+                    {/* Column 1: Services */}
+                    <nav className="flex flex-col space-y-3 items-center sm:items-start">
                         <h6 className="footer-title text-primary uppercase font-bold tracking-wider opacity-100 mb-2 text-sm">
                             Learning Services
                         </h6> 
@@ -84,7 +103,7 @@ const MainLayout = () => {
                             Advanced Biochemistry
                         </a>
                         <a 
-                            href="https:// www.w3schools.com" 
+                            href="https://www.w3schools.com" 
                             target="_blank" 
                             rel="noreferrer" 
                             className="link link-hover text-neutral-content/80 hover:text-primary transition-all duration-300 transform hover:translate-x-1"
@@ -94,7 +113,7 @@ const MainLayout = () => {
                     </nav> 
 
                     {/* Column 2: Contact Info */}
-                    <div className="flex flex-col space-y-3">
+                    <div className="flex flex-col space-y-3 items-center sm:items-start">
                         <h6 className="footer-title text-primary uppercase font-bold tracking-wider opacity-100 mb-2 text-sm">
                             Contact Info
                         </h6> 
@@ -110,7 +129,7 @@ const MainLayout = () => {
                     </div> 
 
                     {/* Column 3: Social Connects */}
-                    <div className="flex flex-col space-y-4">
+                    <div className="flex flex-col space-y-4 items-center sm:items-start">
                         <h6 className="footer-title text-primary uppercase font-bold tracking-wider opacity-100 mb-1 text-sm">
                             Social Connects
                         </h6> 

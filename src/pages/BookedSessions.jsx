@@ -3,7 +3,7 @@ import { AuthContext } from '../providers/AuthProvider';
 import useAxiosSecure from '../hooks/useAxiosSecure';
 import { toast } from 'react-toastify';
 import useDocumentTitle from '../hooks/useDocumentTitle';
-// রিয়াল আইকন ব্যবহারের জন্য Lucide Icons ইমপোর্ট করা হয়েছে
+// 
 import { Trash2, AlertTriangle, Loader2 } from 'lucide-react';
 
 const BookedSessions = () => {
@@ -14,7 +14,7 @@ const BookedSessions = () => {
     const [bookings, setBookings] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     
-    // কাস্টম রিয়াল পপআপ (Modal) এর জন্য স্টেটসমূহ
+    // 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedBookingId, setSelectedBookingId] = useState(null);
     const [isCancelling, setIsCancelling] = useState(false);
@@ -23,8 +23,8 @@ const BookedSessions = () => {
         setIsLoading(true);
         axiosSecure.get(`/my-bookings?email=${user.email}`)
             .then(res => {
-                // শুরুতে শুধুমাত্র যেগুলো একটিভ (cancelled নয়) সেগুলো ফিল্টার করে রাখতে পারেন
-                // যদি আপনার ব্যাকএন্ড সব ডেটাই পাঠায়
+                // 
+                // 
                 const activeBookings = res.data.filter(b => b.status !== 'cancelled');
                 setBookings(activeBookings);
                 setIsLoading(false);
@@ -42,13 +42,13 @@ const BookedSessions = () => {
         }
     }, [user]);
 
-    // ক্যান্সেল বাটন ক্লিক করলে পপআপ ওপেন হবে
+    // 
     const openCancelModal = (id) => {
         setSelectedBookingId(id);
         setIsModalOpen(true);
     };
 
-    // পপআপ এর ভেতরে 'Yes, Cancel' কনফার্ম করলে এই ফাংশনটি চলবে
+    // 
     const handleConfirmCancel = () => {
         if (!selectedBookingId) return;
         
@@ -58,10 +58,10 @@ const BookedSessions = () => {
                 if (res.data.modifiedCount > 0) {
                     toast.success("Booking session has been successfully removed.");
                     
-                    // 🔥 মূল পরিবর্তন: স্টেট থেকে ক্যানসেল হওয়া আইডি-র কার্ডটি সাথে সাথে একদম মুছে ফেলা হলো
+                    // 
                     setBookings(prevBookings => prevBookings.filter(b => b._id !== selectedBookingId));
                 }
-                setIsModalOpen(false); // পপআপ বন্ধ হবে
+                setIsModalOpen(false); // pop-up 
             })
             .catch(() => {
                 toast.error("System connection trace timed out. Failure patching database resource.");
@@ -176,18 +176,18 @@ const BookedSessions = () => {
                 </div>
             )}
 
-            {/* ————————————————————————————————————————————————————————— */}
-            {/* কাস্টম রিয়াল পপআপ মডাল (DaisyUI / Tailwind Modal) */}
-            {/* ————————————————————————————————————————————————————————— */}
+            {/* */}
+            {/* Modal */}
+            {/*  */}
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-                    {/* ব্যাকড্রপ ব্লার লেয়ার */}
+                    {/* Backdrop */}
                     <div 
                         className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
                         onClick={() => !isCancelling && setIsModalOpen(false)}
                     ></div>
 
-                    {/* মডাল কন্টেন্ট বক্স */}
+                    {/* Modal */}
                     <div className="bg-base-100 rounded-2xl max-w-md w-full p-6 shadow-2xl border border-base-300 relative z-10 transform scale-100 transition-all text-center animate-fade-in">
                         <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 text-error mb-4">
                             <AlertTriangle className="h-6 w-6" />
@@ -201,7 +201,7 @@ const BookedSessions = () => {
                             Are you sure you want to cancel this lesson slot? This update will immediately remove the session from your view.
                         </p>
 
-                        {/* অ্যাকশন বাটনসমূহ */}
+                        {/*  */}
                         <div className="flex gap-3 justify-center">
                             <button
                                 type="button"

@@ -5,7 +5,7 @@ import axios from 'axios';
 
 //  Bangladeshi / South Asian Teachers & Studying Vibe Images
 const studentGroupImg = "https://www.dhakatutors.com/slider/ii2.jpg"; 
-const digitalCalendarImg = "https://youthtuitioncenter.com/wp-content/uploads/2025/12/home_tutor.jpg";  
+const digitalCalendarImg = "https://learningpathway.in/appassets/apptemplates/application-template-images/image/2026-02-16T10:43:23.902120638_ChatGPT%20Image%20Dec%2017,%202025,%2002_05_42%20PM.png";  
 const credentialsImg = "https://content.jdmagicbox.com/v2/comp/chennai/c2/044pxx44.xx44.211130032512.t8c2/catalogue/home-shiksha-thoraipakkam-chennai-home-tutors-pmoz6uaj1l.jpg"; 
 
 const subjectStyles = {

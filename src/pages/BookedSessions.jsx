@@ -9,10 +9,21 @@ const BookedSessions = () => {
     const { user } = useContext(AuthContext);
     const axiosSecure = useAxiosSecure();
     const [bookings, setBookings] = useState([]);
+    const [isLoading, setIsLoading] = useState(true); // লোডিং স্টেট যোগ করা হয়েছে
 
     const fetchUserBookings = () => {
+        setIsLoading(true);
+        // নিশ্চিত হয়ে নেওয়া হচ্ছে যে আপনার ব্যাকএন্ড রাউটটি যেন সঠিক থাকে (যেমন: /my-bookings?email=...)
         axiosSecure.get(`/my-bookings?email=${user.email}`)
-            .then(res => setBookings(res.data));
+            .then(res => {
+                setBookings(res.data);
+                setIsLoading(false);
+            })
+            .catch(err => {
+                console.error(err);
+                toast.error("Failed to load your booked sessions.");
+                setIsLoading(false);
+            });
     };
 
     useEffect(() => {
@@ -34,9 +45,18 @@ const BookedSessions = () => {
         }
     };
 
+    // 
+    if (isLoading) {
+        return (
+            <div className="min-h-screen flex justify-center items-center bg-base-300/20">
+                <span className="loading loading-spinner text-primary loading-lg"></span>
+            </div>
+        );
+    }
+
     return (
         <div className="container mx-auto px-4 py-6 md:py-16 max-w-6xl min-h-screen">
-            {/* Header Section - Fully Responsive Typography */}
+            {/* Header Section */}
             <div className="text-center mb-8 md:mb-12">
                 <h2 className="text-2xl sm:text-3xl md:text-5xl font-black tracking-tight text-base-content bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                     My Reserved Learning Sessions
@@ -53,7 +73,7 @@ const BookedSessions = () => {
                     <p className="text-gray-400 text-xs md:text-sm max-w-sm mx-auto">Your account does not currently trace any premium tutor block reservations.</p>
                 </div>
             ) : (
-                /* 💎 Premium Fully Responsive Card Grid Layout */
+                /* Card Grid Layout */
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
                     {bookings.map(b => (
                         <div 
@@ -63,7 +83,7 @@ const BookedSessions = () => {
                             {/* Decorative Top Accent Layer */}
                             <div className={`h-1.5 md:h-2 w-full ${b.status === 'cancelled' ? 'bg-error' : 'bg-success'}`}></div>
                             
-                            {/* Card Body with Fluid Padding */}
+                            {/* Card Body */}
                             <div className="p-4 sm:p-5 md:p-6 flex-1 flex flex-col gap-4 md:gap-5">
                                 
                                 {/* Instructor Profile Header */}
@@ -106,9 +126,19 @@ const BookedSessions = () => {
                                             </p>
                                         </div>
                                     </div>
+
+                                    {/* Special Note (যদি বুকিং করার সময় ইউজার নোট দিয়ে থাকে) */}
+                                    {b.specialNote && (
+                                        <div>
+                                            <p className="text-[10px] md:text-[11px] font-bold uppercase tracking-wider text-gray-400">Special Note</p>
+                                            <p className="text-xs text-base-content/70 mt-0.5 bg-base-200/40 p-2 rounded-lg italic break-words">
+                                                "{b.specialNote}"
+                                            </p>
+                                        </div>
+                                    )}
                                 </div>
 
-                                {/* Operational Trigger Button - Enhanced Mobile Touch Target */}
+                                {/* Operational Trigger Button */}
                                 <div className="mt-1 md:mt-2">
                                     <button 
                                         disabled={b.status === 'cancelled'}

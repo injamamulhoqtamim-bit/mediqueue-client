@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../providers/AuthProvider';
+import useAxiosSecure from '../hooks/useAxiosSecure'; 
 import { toast } from 'react-toastify';
 import useDocumentTitle from '../hooks/useDocumentTitle';
 import axios from 'axios';
@@ -11,10 +12,22 @@ const TutorDetails = () => {
 
   const { id } = useParams();
   const { user } = useContext(AuthContext);
+  const axiosSecure = useAxiosSecure();
 
   const [tutor, setTutor] = useState(null);
+  
+  const [studentName, setStudentName] = useState('');
+  const [studentEmail, setStudentEmail] = useState('');
   const [phone, setPhone] = useState('');
+  const [specialNote, setSpecialNote] = useState(''); 
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      setStudentName(user?.displayName || user?.name || '');
+      setStudentEmail(user?.email || '');
+    }
+  }, [user]);
 
   useEffect(() => {
     axios
@@ -36,25 +49,25 @@ const TutorDetails = () => {
       const bookingData = {
         tutorId: tutor._id,
         tutorName: tutor.tutorName,
-        studentName: user?.displayName || user?.name || 'Anonymous Student',
-        studentEmail: user?.email,
+        tutorPhoto: tutor.photo, // 🌟 এই প্রোপার্টিটি ডাটাবেজে টিউটরের ছবি সেভ করবে
+        studentName: studentName || 'Anonymous Student', 
+        studentEmail: studentEmail,                     
         phone,
+        specialNote,                                    
         status: "booked",
         bookingDate: new Date()
       };
 
-      const res = await axios.post(
-        "https://mediqueue-server-zl2f.onrender.com/bookings",
-        bookingData
-      );
+      const res = await axiosSecure.post("/bookings", bookingData);
 
       if (res.data.insertedId) {
         toast.success("Session booked successfully!");
         setPhone('');
+        setSpecialNote('');
       }
     } catch (error) {
-      console.error(error);
-      toast.error("Booking failed");
+      console.error("Booking Error:", error);
+      toast.error(error.response?.data?.message || "Booking failed");
     } finally {
       setIsSubmitting(false);
     }
@@ -72,7 +85,6 @@ const TutorDetails = () => {
     <div className="min-h-screen bg-gradient-to-b from-[#0A1828] to-[#172A45] text-gray-200 py-6 sm:py-12 md:py-16 px-3 sm:px-4 select-none overflow-hidden">
       <div className="container mx-auto max-w-5xl">
         
-        {/* Main Content Container */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -82,8 +94,6 @@ const TutorDetails = () => {
           
           {/* Tutor Profile Card */}
           <div className="lg:col-span-7 bg-[#0D1F38]/40 border border-white/5 shadow-2xl rounded-2xl md:rounded-3xl p-4 sm:p-6 md:p-8 backdrop-blur-md relative overflow-hidden">
-            
-            {/* Image Container Optimized for Dynamic Imgbb Uploads */}
             <div className="overflow-hidden rounded-xl mb-6 relative group border border-white/5 bg-[#112240]/40 aspect-[4/3] sm:aspect-[16/10] md:aspect-[4/3] lg:aspect-video w-full">
               <img
                 src={tutor.photo}
@@ -100,45 +110,37 @@ const TutorDetails = () => {
               {tutor.tutorName}
             </h2>
 
-            {/* Information Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 border-t border-white/5 pt-4 text-xs sm:text-sm md:text-base">
               <div className="bg-[#112240]/50 p-3 sm:p-4 rounded-xl border border-white/5">
                 <span className="text-gray-400 block text-[10px] sm:text-xs uppercase tracking-wider mb-0.5">Institution</span>
                 <strong className="text-gray-200 font-medium break-words">{tutor.institution}</strong>
               </div>
-
               <div className="bg-[#112240]/50 p-3 sm:p-4 rounded-xl border border-white/5">
                 <span className="text-gray-400 block text-[10px] sm:text-xs uppercase tracking-wider mb-0.5">Location</span>
                 <strong className="text-gray-200 font-medium break-words">{tutor.location}</strong>
               </div>
-
               <div className="bg-[#112240]/50 p-3 sm:p-4 rounded-xl border border-white/5">
                 <span className="text-gray-400 block text-[10px] sm:text-xs uppercase tracking-wider mb-0.5">Teaching Mode</span>
                 <strong className="text-gray-200 font-medium">{tutor.teachingMode}</strong>
               </div>
-
               <div className="bg-[#112240]/50 p-3 sm:p-4 rounded-xl border border-white/5">
                 <span className="text-gray-400 block text-[10px] sm:text-xs uppercase tracking-wider mb-0.5">Available Days</span>
                 <strong className="text-gray-200 font-medium break-words">{tutor.availableDays}</strong>
               </div>
-
               <div className="bg-[#112240]/50 p-3 sm:p-4 rounded-xl border border-white/5">
                 <span className="text-gray-400 block text-[10px] sm:text-xs uppercase tracking-wider mb-0.5">Total Slots</span>
                 <strong className="text-gray-200 font-medium">{tutor.totalSlot} Slots</strong>
               </div>
-
               <div className="bg-[#112240]/50 p-3 sm:p-4 rounded-xl border border-white/5">
                 <span className="text-gray-400 block text-[10px] sm:text-xs uppercase tracking-wider mb-0.5">Session Start</span>
                 <strong className="text-gray-200 font-medium">{tutor.sessionStartDate}</strong>
               </div>
             </div>
 
-            {/* Subscription Fee Block */}
             <div className="mt-5 sm:mt-6 bg-gradient-to-r from-[#112240] to-[#15294A] p-3.5 sm:p-4 rounded-xl flex justify-between items-center border border-white/5 gap-2">
               <span className="text-xs sm:text-sm md:text-base text-gray-300 font-medium">Monthly Subscription Fee</span>
               <span className="text-lg sm:text-xl md:text-2xl font-bold text-[#FF9F29] shrink-0">৳ {tutor.hourlyFee} BDT</span>
             </div>
-
           </div>
 
           {/* Booking Form Card */}
@@ -153,31 +155,33 @@ const TutorDetails = () => {
 
             <form onSubmit={handleBooking} className="space-y-4">
               
-              {/* Student Name */}
+              {/* Student Name (Editable) */}
               <div className="form-control w-full">
-                <span className="text-[10px] sm:text-xs text-gray-400 mb-1.5 ml-1 uppercase tracking-wider">Your Name</span>
+                <span className="text-[10px] sm:text-xs text-gray-300 mb-1.5 ml-1 uppercase tracking-wider">Your Name</span>
                 <input
                   type="text"
-                  value={user?.displayName || user?.name || ''}
-                  readOnly
-                  placeholder="Student Name"
-                  className="w-full bg-[#112240]/70 text-gray-400 border border-white/5 rounded-xl py-2.5 sm:py-3 px-4 sm:px-5 text-xs sm:text-sm outline-none cursor-not-allowed opacity-70"
+                  required
+                  value={studentName}
+                  onChange={(e) => setStudentName(e.target.value)}
+                  placeholder="Enter your name"
+                  className="w-full bg-[#112240] text-gray-200 placeholder-gray-400/60 border border-white/5 rounded-xl py-2.5 sm:py-3.5 px-4 sm:px-5 text-xs sm:text-sm outline-none focus:bg-[#15294A] focus:border-[#4A7BC7]/50 transition-all duration-200"
                 />
               </div>
 
-              {/* Student Email */}
+              {/* Student Email (Editable) */}
               <div className="form-control w-full">
-                <span className="text-[10px] sm:text-xs text-gray-400 mb-1.5 ml-1 uppercase tracking-wider">Your Email</span>
+                <span className="text-[10px] sm:text-xs text-gray-300 mb-1.5 ml-1 uppercase tracking-wider">Your Email</span>
                 <input
                   type="email"
-                  value={user?.email || ''}
-                  readOnly
-                  placeholder="Student Email"
-                  className="w-full bg-[#112240]/70 text-gray-400 border border-white/5 rounded-xl py-2.5 sm:py-3 px-4 sm:px-5 text-xs sm:text-sm outline-none cursor-not-allowed opacity-70"
+                  required
+                  value={studentEmail}
+                  onChange={(e) => setStudentEmail(e.target.value)}
+                  placeholder="Enter your email"
+                  className="w-full bg-[#112240] text-gray-200 placeholder-gray-400/60 border border-white/5 rounded-xl py-2.5 sm:py-3.5 px-4 sm:px-5 text-xs sm:text-sm outline-none focus:bg-[#15294A] focus:border-[#4A7BC7]/50 transition-all duration-200"
                 />
               </div>
 
-              {/* Phone Input */}
+              {/* Contact Number */}
               <div className="form-control w-full">
                 <span className="text-[10px] sm:text-xs text-gray-300 mb-1.5 ml-1 uppercase tracking-wider">Contact Number</span>
                 <input
@@ -187,6 +191,18 @@ const TutorDetails = () => {
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="01XXXXXXXXX"
                   className="w-full bg-[#112240] text-gray-200 placeholder-gray-400/60 border border-white/5 rounded-xl py-2.5 sm:py-3.5 px-4 sm:px-5 text-xs sm:text-sm outline-none focus:bg-[#15294A] focus:border-[#4A7BC7]/50 transition-all duration-200"
+                />
+              </div>
+
+              {/* Special Note (Optional) */}
+              <div className="form-control w-full">
+                <span className="text-[10px] sm:text-xs text-gray-300 mb-1.5 ml-1 uppercase tracking-wider">Special Note (Optional)</span>
+                <textarea
+                  rows="3"
+                  value={specialNote}
+                  onChange={(e) => setSpecialNote(e.target.value)}
+                  placeholder="Any specific requirements or topic you want to discuss..."
+                  className="w-full bg-[#112240] text-gray-200 placeholder-gray-400/60 border border-white/5 rounded-xl py-2.5 sm:py-3 px-4 sm:px-5 text-xs sm:text-sm outline-none focus:bg-[#15294A] focus:border-[#4A7BC7]/50 transition-all duration-200 resize-none"
                 />
               </div>
 

@@ -49,7 +49,7 @@ const TutorDetails = () => {
       const bookingData = {
         tutorId: tutor._id,
         tutorName: tutor.tutorName,
-        tutorPhoto: tutor.photo, // 🌟 এই প্রোপার্টিটি ডাটাবেজে টিউটরের ছবি সেভ করবে
+        tutorPhoto: tutor.photo, //
         studentName: studentName || 'Anonymous Student', 
         studentEmail: studentEmail,                     
         phone,

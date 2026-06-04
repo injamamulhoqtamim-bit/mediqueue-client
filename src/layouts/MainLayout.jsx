@@ -1,8 +1,8 @@
 import { Outlet } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
-// ১. আপনার লোগো ফাইলটি যদি src/assets ফোল্ডারে থাকে তবে এভাবে ইমপোর্ট করুন:
-// import logo from "../assets/logo.png";
+// 
+// 
 
 const MainLayout = () => {
     // teacher student pictures for background
@@ -58,9 +58,9 @@ const MainLayout = () => {
                 {/* Brand Logo & Name Area for Footer (Fully Responsive Alignment) */}
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-4 border-b border-white/5">
                     <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-2.5 group w-full sm:w-fit text-center sm:text-left">
-                        {/* লোগো ইমেজ ট্যাগ */}
+                        {/*  */}
                         <img 
-                            src="/logo.png" // public ফোল্ডারে থাকলে এভাবে রাখুন, assets ফোল্ডারে থাকলে src={logo} দিন
+                            src="/logo.png" //
                             alt="Teachers Finding Logo" 
                             className="w-9 h-9 md:w-10 md:h-10 object-contain transition-transform duration-300 group-hover:scale-105" 
                         />
@@ -70,7 +70,7 @@ const MainLayout = () => {
                     </div>
                 </div>
 
-                {/* Grid Adjustment: Mobile-এ ১ কলাম, Tablet-এ ২ কলাম এবং Desktop-এ ৪ কলাম হবে */}
+                {/*  */}
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 text-center sm:text-left">
                     
                     {/* Column 1: Services */}

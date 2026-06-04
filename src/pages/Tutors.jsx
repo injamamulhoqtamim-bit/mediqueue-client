@@ -10,7 +10,7 @@ const Tutors = () => {
     const [sortBy, setSortBy] = useState('latest'); // Default sorting
     const [loading, setLoading] = useState(true);
 
-    // শুধুমাত্র সার্চের ওপর ভিত্তি করে ডেটা ফেচ হবে
+    // 
     const fetchTutors = () => {
         setLoading(true);
         axios.get(`https://mediqueue-server-zl2f.onrender.com/tutors?search=${search}`)
@@ -24,12 +24,12 @@ const Tutors = () => {
             });
     };
 
-    // যখনই সার্চ স্টেট পরিবর্তন হবে, ব্যাকএন্ড থেকে নতুন ডেটা আসবে
+    // 
     useEffect(() => {
         fetchTutors();
     }, [search]);
 
-    // ফ্রন্টএন্ডেই ডেটা সর্ট করার লজিক
+    // 
     const getSortedTutors = () => {
         const tutorsCopy = [...tutors]; 
         

@@ -1,10 +1,10 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react'; // 
 import { Link, useNavigate, useLocation } from 'react-router-dom'; 
 import { AuthContext } from '../providers/AuthProvider';
 import { toast } from 'react-toastify';
 import { useGoogleLogin } from '@react-oauth/google'; 
 import useDocumentTitle from '../hooks/useDocumentTitle';
-import { FaUser, FaLock } from 'react-icons/fa';
+import { FaUser, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa'; // 
 import { FcGoogle } from 'react-icons/fc'; 
 
 const Login = () => {
@@ -13,6 +13,9 @@ const Login = () => {
   const { loginWithGoogle, loginUser } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
+  
+  // 
+  const [showPassword, setShowPassword] = useState(false);
 
   const executionRedirectTarget = location.state?.from?.pathname || '/';
 
@@ -77,16 +80,24 @@ const Login = () => {
             />
           </div>
 
-          {/* Password Input Field */}
+          {/* Password Input Field with Show/Hide Toggle */}
           <div className="relative flex items-center">
             <FaLock className="absolute left-5 text-gray-500 text-base sm:text-lg" />
             <input
-              type="password"
+              type={showPassword ? "text" : "password"} // 
               name="password"
               placeholder="Password"
               required
-              className="w-full pl-12 pr-5 py-3.5 rounded-full bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-blue-500/50 text-sm sm:text-base md:text-lg transition-all"
+              className="w-full pl-12 pr-12 py-3.5 rounded-full bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-blue-500/50 text-sm sm:text-base md:text-lg transition-all"
             />
+            {/* Show/Hide Password Toggle */}
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-5 text-gray-500 hover:text-gray-700 text-base sm:text-lg focus:outline-none"
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
           </div>
 
           {/* Remember me & Forgot password */}

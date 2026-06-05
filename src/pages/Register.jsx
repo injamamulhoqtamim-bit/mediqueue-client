@@ -5,8 +5,10 @@ import { toast } from 'react-toastify';
 import { GoogleLogin } from '@react-oauth/google';
 import useDocumentTitle from '../hooks/useDocumentTitle';
 import axios from 'axios';
+// 👁️ চোখের আইকনের জন্য lucide-react ইমপোর্ট
+import { Eye, EyeOff } from 'lucide-react'; 
 
-// ⚙️ ImgBB API Key (Replace with your actual key)
+// ⚙️ ImgBB API Key 
 const IMGBB_API_KEY = "0d5bb04602de817396a13eccc827e53f";
 
 const Register = () => {
@@ -16,8 +18,9 @@ const Register = () => {
   const navigate = useNavigate();
 
   const [animateIn, setAnimateIn] = useState(false);
-  
   const [uploading, setUploading] = useState(false);
+  // 👁️ পাসওয়ার্ড ভিজিবিলিটি ট্র্যাকিং এর জন্য স্টেট
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     setAnimateIn(true);
@@ -33,7 +36,6 @@ const Register = () => {
     const password = form.password.value;
     const imageFile = form.photo.files[0]; 
 
-    
     if (!imageFile) {
       toast.error('Please upload a profile picture.');
       setUploading(false);
@@ -41,7 +43,6 @@ const Register = () => {
     }
 
     try {
-      // 
       const formData = new FormData();
       formData.append('image', imageFile);
 
@@ -50,10 +51,8 @@ const Register = () => {
         formData
       );
 
-      // 
       const photoUrl = imgBbRes.data.data.display_url;
 
-      // 
       const userData = {
         name,
         email,
@@ -61,7 +60,6 @@ const Register = () => {
         photo: photoUrl, 
       };
 
-      // registration API
       const res = await axios.post(
         'https://mediqueue-server-zl2f.onrender.com/register',
         userData
@@ -86,7 +84,7 @@ const Register = () => {
         
         <div className="text-left mb-6 sm:mb-8">
           <h2 className="text-xl sm:text-2xl md:text-3xl font-normal tracking-wide text-gray-200 font-sans opacity-90">
-            Registration form
+            Create Account
           </h2>
         </div>
 
@@ -128,10 +126,10 @@ const Register = () => {
             />
           </div>
 
-          {/* Password Input */}
+          {/* Password Input (আইকন ছাড়া সাধারণ ইনপুট) */}
           <div className="form-control w-full">
             <input 
-              type="password" 
+              type={showPassword ? "text" : "password"} 
               name="password" 
               placeholder="Password" 
               required 
@@ -139,7 +137,28 @@ const Register = () => {
             />
           </div>
 
-          {/* SIGN UP Button  */}
+          {/* 👁️ নতুন লোকেশন: SIGN UP এর ঠিক উপরে চোখের আইকন বাটন */}
+          <div className="flex justify-end items-center pt-0.5">
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="flex items-center gap-2 text-gray-400 hover:text-gray-200 text-xs sm:text-sm transition-colors focus:outline-none bg-transparent border-none cursor-pointer"
+            >
+              {showPassword ? (
+                <>
+                  <EyeOff className="h-4 w-4" />
+                  <span>Hide Password</span>
+                </>
+              ) : (
+                <>
+                  <Eye className="h-4 w-4" />
+                  <span>Show Password</span>
+                </>
+              )}
+            </button>
+          </div>
+
+          {/* SIGN UP Button */}
           <div className="pt-1 sm:pt-2">
             <button
               type="submit"

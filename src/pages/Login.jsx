@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom'; 
 import { AuthContext } from '../providers/AuthProvider';
 import { toast } from 'react-toastify';
 import { useGoogleLogin } from '@react-oauth/google'; 
@@ -58,8 +58,9 @@ const Login = () => {
       {/* Main Container - Adjusted max-width for look and feel consistency */}
       <div className="w-full max-w-md sm:max-w-lg bg-white/10 backdrop-blur-md shadow-2xl border border-white/10 p-6 sm:p-8 md:p-10 rounded-3xl sm:rounded-[2.5rem] text-white">
         
-        <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-center mb-6 md:mb-8 tracking-wider">
-          User Login
+        {/* Updated Subtitle Section */}
+        <h2 className="text-sm sm:text-base md:text-lg font-medium text-center mb-6 md:mb-8 text-gray-200/90 tracking-wide">
+          Please enter your details to Login
         </h2>
 
         <form onSubmit={handleLogin} className="space-y-4 sm:space-y-6 w-full">
@@ -113,8 +114,14 @@ const Login = () => {
           </div>
         </form>
 
-        {/* Divider */}
-        <div className="divider before:bg-white/20 after:bg-white/20 my-6 sm:my-8 text-xs sm:text-sm text-gray-300">OR</div>
+        {/* Custom Divider */}
+        <div className="flex items-center my-6 sm:my-8 w-full">
+          <div className="grow h-[1px] bg-white/20"></div>
+          <span className="px-4 text-[11px] sm:text-xs font-bold tracking-widest text-gray-300 uppercase whitespace-nowrap">
+            Or Continue With
+          </span>
+          <div className="grow h-[1px] bg-white/20"></div>
+        </div>
 
         {/* Google Login Button */}
         <div className="flex justify-center">
@@ -128,9 +135,9 @@ const Login = () => {
           </button>
         </div>
 
-        {/* Registration Link */}
+        {/* Updated Registration Link */}
         <p className="text-center text-xs sm:text-sm text-gray-300 mt-6 sm:mt-8">
-          New user?{' '}
+          Don't have an account?{' '}
           <Link
             to="/register"
             className="text-white font-bold underline hover:text-blue-200 ml-1 transition-colors"
